@@ -1,6 +1,10 @@
 const express = require('express')
+const morgan = require('morgan')
 
 const app = express()
+
+// Apply Middleware
+app.use(morgan('common'))
 
 app.get('/', (_, res) => {
 	res.json({ hello: 'world' })
