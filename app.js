@@ -15,7 +15,7 @@ var accessLogStream = fs.createWriteStream(path.join(__dirname, 'server.log'), {
 })
 app.use(morgan('combined', { stream: accessLogStream }))
 
-app.use('/product', bodyParser.urlencoded())
+app.use('/product', bodyParser.urlencoded({ extended: false }))
 
 /* Add routes */
 app.get('/', (_, res) => {
