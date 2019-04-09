@@ -2,6 +2,7 @@ const express = require('express')
 const morgan = require('morgan')
 const fs = require('fs')
 const path = require('path')
+const bodyParser = require('body-parser')
 
 const app = express()
 
@@ -13,6 +14,8 @@ var accessLogStream = fs.createWriteStream(path.join(__dirname, 'server.log'), {
 	flags: 'a'
 })
 app.use(morgan('combined', { stream: accessLogStream }))
+
+app.use('/product', bodyParser.urlencoded())
 
 /* Add routes */
 app.get('/', (_, res) => {
@@ -26,7 +29,7 @@ app.get('/add-product', (_, res) => {
 })
 
 app.post('/product', (req, res) => {
-	console.log(`Req body: ${req.body}`)
+	console.log('Req body: ', req.body)
 	res.redirect('/')
 })
 
