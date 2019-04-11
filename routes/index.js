@@ -11,6 +11,6 @@ module.exports = app => {
 
 	// Setting up 404 message
 	app.use((_, res) => {
-		res.sendFile(path.join(__dirname, '../', 'views', '404.html'))
+		res.status(404).sendFile(path.join(__dirname, '../', 'views', '404.html'))
 	})
 }
