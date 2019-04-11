@@ -1,4 +1,4 @@
-/* eslint-disable no-undef */
+/* global process, __dirname */
 const express = require('express')
 const morgan = require('morgan')
 const fs = require('fs')
