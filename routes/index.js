@@ -1,12 +1,12 @@
-const home = require('./home')
-const product = require('./products')
+const homeRoute = require('./home')
+const productRoutes = require('./products')
 
 /* Remember order matters when registering routes */
 const pageNotFoundTemplate = () => '<h2>404 - Page Not Found</h2>'
 
 module.exports = app => {
-	app.use(home)
-	app.use(product)
+	app.use(homeRoute)
+	app.use('/product', productRoutes)
 
 	app.use((_, res, next) => {
 		res.status(404).send(pageNotFoundTemplate())
