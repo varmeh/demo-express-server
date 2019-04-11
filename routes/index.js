@@ -1,5 +1,6 @@
-/* global __dirname */
 const path = require('path')
+
+const { rootDir } = require('../util')
 
 const homeRoute = require('./home')
 const productRoutes = require('./products')
@@ -11,6 +12,6 @@ module.exports = app => {
 
 	// Setting up 404 message
 	app.use((_, res) => {
-		res.status(404).sendFile(path.join(__dirname, '../', 'views', '404.html'))
+		res.status(404).sendFile(path.join(rootDir, 'views', '404.html'))
 	})
 }
