@@ -1,11 +1,11 @@
+/* global __dirname */
 const express = require('express')
+const path = require('path')
 
 const router = express.Router()
 
 router.get('/add', (_, res) => {
-	res.send(
-		'<form action="/product/all" method="POST"><input type="text" name="title"><button type="submit">Add Product</button></form>'
-	)
+	res.sendFile(path.join(__dirname, '../', 'views', 'add-product.html'))
 })
 
 router.post('/all', (req, res) => {
