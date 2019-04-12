@@ -7,8 +7,8 @@ const productRoutes = require('./products')
 
 /* Remember order matters when registering routes */
 module.exports = app => {
-	app.use(homeRoute)
 	app.use('/product', productRoutes)
+	app.use(homeRoute)
 
 	// Setting up 404 message
 	app.use((_, res) => {
