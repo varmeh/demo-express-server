@@ -24,7 +24,7 @@ app.use('/product', bodyParser.urlencoded({ extended: false }))
 app.use(express.static(path.join(__dirname, 'public')))
 
 /* Configuring Pug Templating engine */
-const handleBarsRefEngineName = 'handlebars'
+const handleBarsRefEngineName = 'hbs'
 app.engine(handleBarsRefEngineName, expressHbs)
 app.set('view engine', handleBarsRefEngineName)
 app.set('views', 'views')
