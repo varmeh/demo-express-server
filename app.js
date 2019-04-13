@@ -1,5 +1,5 @@
 /* global process, __dirname */
-const express = require('express-handlebars')
+const express = require('express')
 const morgan = require('morgan')
 const fs = require('fs')
 const path = require('path')
