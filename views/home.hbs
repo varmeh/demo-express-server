@@ -23,7 +23,7 @@
 	</header>
 
 	<main>
-		{{#if prods.length > 0}}
+		{{#if hasProducts}}
 		<div class="grid">
 			<article class="card product-item">
 				<header class="card__header">
@@ -42,7 +42,7 @@
 				</div>
 			</article>
 		</div>
-		{{#else}}
+		{{ else }}
 		<h4>No Product Found</h4>
 		{{/if}}
 	</main>
