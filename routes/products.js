@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 
 router.get('/add', (_, res) => {
-	res.render('add-product')
+	res.render('add-product', { pageTitle: 'Add Products' })
 })
 
 router.post('/all', (req, res) => {
