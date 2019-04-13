@@ -56,6 +56,7 @@ main {
 
 .card {
 	box-shadow: 0 2px 8px #da8c27;
+	margin: 1rem;
 }
 
 .card__header,
