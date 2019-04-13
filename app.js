@@ -20,12 +20,12 @@ app.use(morgan('combined', { stream: accessLogStream }))
 
 app.use('/product', bodyParser.urlencoded({ extended: false }))
 
-// Opening api access to public folder
+/* Opening api access to public folder  */
 app.use(express.static(path.join(__dirname, 'public')))
 
 /* Configuring Pug Templating engine */
 const hbsEngineName = 'hbs'
-app.engine(hbsEngineName, expressHbs)
+app.engine(hbsEngineName, expressHbs())
 app.set('view engine', hbsEngineName)
 app.set('views', 'views')
 
