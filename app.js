@@ -19,8 +19,12 @@ app.use(morgan('combined', { stream: accessLogStream }))
 
 app.use('/product', bodyParser.urlencoded({ extended: false }))
 
-// Opening api access to public folder
+/* Opening api access to public folder */
 app.use(express.static(path.join(__dirname, 'public')))
+
+/* Setting up ejs template engine */
+app.set('view engine', 'ejs')
+app.set('views', 'views')
 
 /* Add routes */
 configureRoutes(app)
