@@ -24,9 +24,14 @@ app.use('/product', bodyParser.urlencoded({ extended: false }))
 app.use(express.static(path.join(__dirname, 'public')))
 
 /* Configuring Pug Templating engine */
-const hbsEngineName = 'hbs'
-app.engine(hbsEngineName, expressHbs())
-app.set('view engine', hbsEngineName)
+app.engine(
+	'hbs',
+	expressHbs({
+		layoutsDir: 'views/layouts/',
+		defaultLayout: 'main.hbs'
+	})
+)
+app.set('view engine', 'hbs')
 app.set('views', 'views')
 
 /* Add routes */
