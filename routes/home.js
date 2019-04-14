@@ -23,7 +23,9 @@ router.get('/', (_, res) => {
 				description: 'A fine book'
 			}
 		],
-		hasProducts: true
+		hasProducts: true,
+		buttonCSS: true,
+		activeHome: true
 	})
 })
 
