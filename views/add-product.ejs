@@ -11,16 +11,7 @@
 		<link rel="stylesheet" href="/css/button.css" />
 	</head>
 	<body>
-		<header class="main-header">
-			<nav class="main-header__nav">
-				<ul class="main-header__item-list">
-					<li class="main-header__item"><a href="/">Home</a></li>
-					<li class="main-header__item">
-						<a class="active" href="/product/add">Add Product</a>
-					</li>
-				</ul>
-			</nav>
-		</header>
+		<%- include('shared/navigation.ejs') %>
 
 		<main>
 			<form class="product-form" action="/product/all" method="POST">

@@ -1,7 +1,3 @@
-const path = require('path')
-
-const { rootDir } = require('../util')
-
 const homeRoute = require('./home')
 const productRoutes = require('./products')
 
