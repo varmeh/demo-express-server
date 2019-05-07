@@ -3,7 +3,7 @@ const products = []
 module.exports = class Product {
 	constructor({
 		title = '',
-		description = '',
+		description = 'A Book',
 		type = 'Books',
 		price = '9.99$'
 	}) {
