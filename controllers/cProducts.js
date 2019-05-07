@@ -1,4 +1,4 @@
-const Product = require('../models/product')
+const Product = require('../models/mProduct')
 
 new Product({
 	title: 'First Book',
