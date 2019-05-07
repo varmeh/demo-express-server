@@ -1,3 +1,5 @@
+const Product = require('../models/mProduct')
+
 const express = require('express')
 
 const router = express.Router()
@@ -7,7 +9,7 @@ router.get('/add', (_, res) => {
 })
 
 router.post('/all', (req, res) => {
-	console.log('Req body: ', req.body)
+	new Product({ title: req.body.title }).save()
 	res.redirect('/')
 })
 
