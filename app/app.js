@@ -5,22 +5,25 @@ const fs = require('fs')
 const path = require('path')
 const bodyParser = require('body-parser')
 
-const configureRoutes = require('./routes')
+const configureRoutes = require('./main.routes')
 const app = express()
 
 /* Apply Middleware */
 app.use(morgan('common'))
 
 // Setup logging a file (in append mode)
-var accessLogStream = fs.createWriteStream(path.join(__dirname, 'server.log'), {
-	flags: 'a'
-})
+var accessLogStream = fs.createWriteStream(
+	path.join(__dirname, '..', 'server.log'),
+	{
+		flags: 'a'
+	}
+)
 app.use(morgan('combined', { stream: accessLogStream }))
 
 app.use('/product', bodyParser.urlencoded({ extended: false }))
 
 /* Opening api access to public folder */
-app.use(express.static(path.join(__dirname, 'public')))
+app.use(express.static(path.join(__dirname, '..', 'public')))
 
 /* Setting up ejs template engine */
 app.set('view engine', 'ejs')

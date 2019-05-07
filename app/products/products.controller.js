@@ -1,4 +1,4 @@
-const Product = require('../models/mProduct')
+const Product = require('./product.model')
 
 exports.showProducts = (_, res) => {
 	res.render('home', {

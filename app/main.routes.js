@@ -1,5 +1,5 @@
-const homeRoute = require('./home')
-const productRoutes = require('./products')
+const homeRoute = require('./home/home.routes')
+const productRoutes = require('./products/products.routes')
 
 /* Remember order matters when registering routes */
 module.exports = app => {

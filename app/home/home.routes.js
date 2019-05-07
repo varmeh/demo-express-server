@@ -2,7 +2,7 @@ const express = require('express')
 
 const router = express.Router()
 
-const { showProducts } = require('../controllers/cProducts')
+const { showProducts } = require('../products/products.controller')
 
 router.get('/', showProducts)
 
