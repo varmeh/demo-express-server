@@ -1,4 +1,12 @@
-const products = []
+/* eslint-disable no-undef */
+const fs = require('fs')
+const path = require('path')
+
+const file = path.join(
+	path.dirname(process.mainModule.filename),
+	'..',
+	'products.json'
+)
 
 module.exports = class Product {
 	constructor({
@@ -16,10 +24,21 @@ module.exports = class Product {
 	}
 
 	save() {
-		products.push(this)
+		fs.readFile(file, (err, fileContent) => {
+			let products = []
+			if (!err) {
+				products = JSON.parse(fileContent)
+			}
+			products.push(this)
+			fs.writeFile(file, JSON.stringify(products), err => {
+				console.log(err)
+			})
+		})
 	}
 
-	static fetchAll() {
-		return products
+	static fetchAll(cb) {
+		fs.readFile(file, (err, fileContent) => {
+			cb(err ? [] : JSON.parse(fileContent))
+		})
 	}
 }
