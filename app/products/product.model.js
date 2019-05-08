@@ -8,6 +8,11 @@ const file = path.join(
 	'products.json'
 )
 
+const getProductsFromFile = cb => {
+	fs.readFile(file, (err, fileContent) => {
+		cb(err ? [] : JSON.parse(fileContent))
+	})
+}
 module.exports = class Product {
 	constructor({
 		title = '',
@@ -24,21 +29,13 @@ module.exports = class Product {
 	}
 
 	save() {
-		fs.readFile(file, (err, fileContent) => {
-			let products = []
-			if (!err) {
-				products = JSON.parse(fileContent)
-			}
+		getProductsFromFile(products => {
 			products.push(this)
-			fs.writeFile(file, JSON.stringify(products), err => {
-				console.log(err)
-			})
+			fs.writeFile(file, JSON.stringify(products), err => console.log(err))
 		})
 	}
 
 	static fetchAll(cb) {
-		fs.readFile(file, (err, fileContent) => {
-			cb(err ? [] : JSON.parse(fileContent))
-		})
+		getProductsFromFile(cb)
 	}
 }
