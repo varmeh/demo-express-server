@@ -50,12 +50,13 @@ main {
 .grid {
 	display: flex;
 	flex-wrap: wrap;
-	justify-content: space-around;
+	justify-content: center;
 	align-items: stretch;
 }
 
 .card {
 	box-shadow: 0 2px 8px #da8c27;
+	margin: 1rem;
 }
 
 .card__header,
