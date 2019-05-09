@@ -10,8 +10,29 @@
 			</li>
 			<li class="main-header__item">
 				<a
+					class="<%= pageTitle.search(/products/i) === 0 ? 'active' : '' %>"
+					href="/products"
+					>Products</a
+				>
+			</li>
+			<li class="main-header__item">
+				<a
+					class="<%= pageTitle.search(/cart/i) === 0 ? 'active' : '' %>"
+					href="/cart"
+					>Cart</a
+				>
+			</li>
+			<li class="main-header__item">
+				<a
+					class="<%= pageTitle.search(/admin/i) === 0 ? 'active' : '' %>"
+					href="/admin/products"
+					>Admin Products</a
+				>
+			</li>
+			<li class="main-header__item">
+				<a
 					class="<%= pageTitle.search(/add/i) === 0 ? 'active' : '' %>"
-					href="/product/add"
+					href="/admin/add-product"
 					>Add Product</a
 				>
 			</li>

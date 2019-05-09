@@ -4,7 +4,7 @@ const express = require('express')
 
 const router = express.Router()
 
-router.get('/add', (_, res) => {
+router.get('/add-product', (_, res) => {
 	res.render('admin/add-product', { pageTitle: 'Add Product' })
 })
 

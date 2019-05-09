@@ -1,8 +1,8 @@
-const Product = require('../products/product.model')
+const Product = require('../admin/product.model')
 
 exports.showProducts = (_, res) => {
 	Product.fetchAll(products =>
-		res.render('shop/product-list', {
+		res.render('customer/product-list', {
 			pageTitle: 'Home',
 			products: products
 		})

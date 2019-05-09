@@ -20,7 +20,7 @@ var accessLogStream = fs.createWriteStream(
 )
 app.use(morgan('combined', { stream: accessLogStream }))
 
-app.use('/product', bodyParser.urlencoded({ extended: false }))
+app.use('/admin', bodyParser.urlencoded({ extended: false }))
 
 /* Opening api access to public folder */
 app.use(express.static(path.join(__dirname, '..', 'public')))
