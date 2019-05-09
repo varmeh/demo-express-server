@@ -1,3 +1,7 @@
-node_modules
+# Folders
+node_modules/
+.vscode/
+
+# Runtime Files
 server.log
 products.json
