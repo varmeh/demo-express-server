@@ -1,4 +1,4 @@
-a {
+a.btn {
 	font: inherit;
 	border: 1px solid #da8c27;
 	color: #da8c27;
@@ -9,12 +9,12 @@ a {
 	text-decoration: none;
 }
 
-a:hover {
+a.btn:hover {
 	background-color: #da8c27;
 	color: white;
 }
 
-a:active {
+a.btn:active {
 	background-color: #ee8d0e;
 	color: white;
 }
