@@ -2,6 +2,8 @@
 const fs = require('fs')
 const path = require('path')
 
+var uniqid = require('uniqid')
+
 const file = path.join(
 	path.dirname(process.mainModule.filename),
 	'..',
@@ -30,9 +32,14 @@ module.exports = class Product {
 	}
 
 	save() {
+		this.id = uniqid()
 		getProductsFromFile(products => {
 			products.push(this)
-			fs.writeFile(file, JSON.stringify(products), err => console.log(err))
+			fs.writeFile(file, JSON.stringify(products), err => {
+				if (err) {
+					console.error(`WriteToFileFailed: ${err.description}`)
+				}
+			})
 		})
 	}
 
