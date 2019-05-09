@@ -19,6 +19,21 @@
 					<label for="Title">Title</label>
 					<input type="text" name="title" id="title" />
 				</div>
+				<div class="form-control">
+					<label for="image">Image Url</label>
+					<input type="text" name="image" id="image" value=<%= defaultImageUrl
+					%> />
+				</div>
+				<div class="form-control">
+					<label for="price">Price</label>
+					<input type="number" name="price" id="price" value="9" step=".01" />
+				</div>
+				<div class="form-control">
+					<label for="description">Description</label>
+					<textarea name="description" id="description" rows="5">
+A very fine book</textarea
+					>
+				</div>
 				<button type="submit">Add Product</button>
 			</form>
 		</main>
