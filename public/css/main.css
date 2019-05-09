@@ -69,6 +69,7 @@ main {
 .card__content h2,
 .card__content p {
 	margin: 0;
+	text-align: center;
 }
 
 .card__image {
