@@ -24,6 +24,12 @@ exports.getCart = (_, res) => {
 	})
 }
 
+exports.getOrders = (_, res) => {
+	res.render('customer/orders', {
+		pageTitle: 'Orders'
+	})
+}
+
 exports.getCheckout = (_, res) => {
 	res.render('customer/checkout', {
 		pageTitle: 'Checkout'
