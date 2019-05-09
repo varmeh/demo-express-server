@@ -13,6 +13,7 @@ const getProductsFromFile = cb => {
 		cb(err ? [] : JSON.parse(fileContent))
 	})
 }
+
 module.exports = class Product {
 	constructor({
 		title = '',

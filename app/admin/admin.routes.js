@@ -1,16 +1,13 @@
-const Product = require('./product.model')
-
 const express = require('express')
 
 const router = express.Router()
 
-router.get('/add-product', (_, res) => {
-	res.render('admin/add-product', { pageTitle: 'Add Product' })
-})
+const { newProduct, saveProduct } = require('./admin.controller')
 
-router.post('/all', (req, res) => {
-	new Product({ title: req.body.title }).save()
-	res.redirect('/')
-})
+router.get('/add-product', newProduct)
+
+router.post('/all', saveProduct)
+
+router.get('/products')
 
 module.exports = router
