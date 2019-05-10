@@ -19,7 +19,9 @@ exports.getProducts = (_, res) => {
 }
 
 exports.getProductDetails = (req, res) => {
-	console.log(`Product Id : ${req.params.productId}`)
+	Product.findById(req.params.productId, product =>
+		console.log('Selected Product: ', product)
+	)
 	res.redirect('/')
 }
 
