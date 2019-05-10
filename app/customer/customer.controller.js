@@ -18,6 +18,11 @@ exports.getProducts = (_, res) => {
 	)
 }
 
+exports.getProductDetails = (req, res) => {
+	console.log(`Product Id : ${req.params.productId}`)
+	res.redirect('/')
+}
+
 exports.getCart = (_, res) => {
 	res.render('customer/cart', {
 		pageTitle: 'Cart'
