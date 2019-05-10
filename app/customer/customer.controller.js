@@ -20,9 +20,8 @@ exports.getProducts = (_, res) => {
 
 exports.getProductDetails = (req, res) => {
 	Product.findById(req.params.productId, product =>
-		console.log('Selected Product: ', product)
+		res.render('customer/product-detail', { pageTitle: product.title, product })
 	)
-	res.redirect('/')
 }
 
 exports.getCart = (_, res) => {

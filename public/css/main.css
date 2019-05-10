@@ -63,6 +63,7 @@ form {
 	align-items: stretch;
 }
 
+/* Mobile Navigation */
 .mobile-nav {
 	width: 30rem;
 	height: 100vh;
@@ -140,6 +141,17 @@ form {
 	display: none;
 }
 
+@media (min-width: 768px) {
+	.main-header__nav {
+		display: flex;
+	}
+
+	#side-menu-toggle {
+		display: none;
+	}
+}
+
+/* Cards CSS for product listing */
 .card {
 	box-shadow: 0 2px 8px #da8c27;
 	margin: 1rem;
@@ -175,14 +187,4 @@ form {
 .card__actions a {
 	margin: 0 0.25rem;
 	outline-style: none;
-}
-
-@media (min-width: 768px) {
-	.main-header__nav {
-		display: flex;
-	}
-
-	#side-menu-toggle {
-		display: none;
-	}
 }
