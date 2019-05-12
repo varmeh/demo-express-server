@@ -30,6 +30,10 @@ exports.getCart = (_, res) => {
 	})
 }
 
+exports.addToCart = (req, res) => {
+	console.log(`Product id: ${req.body.productId}`)
+}
+
 exports.getOrders = (_, res) => {
 	res.render('customer/orders', {
 		pageTitle: 'Orders'

@@ -20,7 +20,9 @@ var accessLogStream = fs.createWriteStream(
 )
 app.use(morgan('combined', { stream: accessLogStream }))
 
+/* Configure request body parser on different routes */
 app.use('/admin', bodyParser.urlencoded({ extended: false }))
+app.post('/cart/add', bodyParser.urlencoded({ extended: false }))
 
 /* Opening api access to public folder */
 app.use(express.static(path.join(__dirname, '..', 'public')))
