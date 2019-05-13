@@ -45,6 +45,11 @@ exports.updateProduct = (req, res) => {
 	res.redirect('/')
 }
 
+exports.deleteById = (req, res) => {
+	new Product({ id: req.body.id }).delete()
+	res.redirect('/')
+}
+
 exports.getProducts = (_, res) => {
 	Product.fetchAll(products => {
 		res.render('admin/products', {

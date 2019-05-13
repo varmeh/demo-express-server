@@ -61,6 +61,13 @@ module.exports = class Product {
 		})
 	}
 
+	delete() {
+		getProductsFromFile(products => {
+			const updatedProducts = products.filter(product => product.id !== this.id)
+			this.writeToFile(updatedProducts)
+		})
+	}
+
 	static fetchAll(cb) {
 		getProductsFromFile(cb)
 	}
