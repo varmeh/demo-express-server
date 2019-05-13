@@ -6,11 +6,36 @@ const defaultImageUrl =
 exports.newProduct = (_, res) => {
 	res.render('admin/edit-product', {
 		pageTitle: 'Add Product',
-		defaultImageUrl
+		url: defaultImageUrl,
+		edit: false
 	})
 }
 
 exports.saveProduct = (req, res) => {
+	const { title, image, price, description } = req.body
+	new Product({ title, image, price, description }).save()
+	res.redirect('/')
+}
+
+exports.editProduct = (req, res) => {
+	Product.findById(req.params.id, product => {
+		if (!product) {
+			res.render('customer/error-info', {
+				pageTitle: 'Missing Product',
+				message: 'Product not found!!!'
+			})
+		} else {
+			res.render('admin/edit-product', {
+				pageTitle: 'Edit Product',
+				url: product.image,
+				product,
+				edit: true
+			})
+		}
+	})
+}
+
+exports.updateProduct = (req, res) => {
 	const { title, image, price, description } = req.body
 	new Product({ title, image, price, description }).save()
 	res.redirect('/')
