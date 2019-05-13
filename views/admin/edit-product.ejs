@@ -2,6 +2,8 @@
 <html lang="en">
 	<head>
 		<%- include('../includes/head.ejs') %>
+		<link rel="stylesheet" href="/css/form.css" />
+		<link rel="stylesheet" href="/css/product.css" />
 		<link rel="stylesheet" href="/css/button.css" />
 	</head>
 
@@ -9,7 +11,28 @@
 		<%- include('../includes/navigation.ejs') %>
 
 		<main>
-			<h1>Edit Product</h1>
+			<form class="product-form" action="/admin/all" method="POST">
+				<div class="form-control">
+					<label for="Title">Title</label>
+					<input type="text" name="title" id="title" />
+				</div>
+				<div class="form-control">
+					<label for="image">Image Url</label>
+					<input type="text" name="image" id="image" value=<%= defaultImageUrl
+					%> />
+				</div>
+				<div class="form-control">
+					<label for="price">Price</label>
+					<input type="number" name="price" id="price" value="9" step="0.01" />
+				</div>
+				<div class="form-control">
+					<label for="description">Description</label>
+					<textarea name="description" id="description" rows="5">
+A very fine book</textarea
+					>
+				</div>
+				<button class="btn" type="submit">Save</button>
+			</form>
 		</main>
 	</body>
 </html>

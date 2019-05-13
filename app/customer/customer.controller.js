@@ -39,8 +39,9 @@ exports.addToCart = (req, res) => {
 }
 
 exports.getOrders = (_, res) => {
-	res.render('customer/orders', {
-		pageTitle: 'Orders'
+	res.render('customer/error-info', {
+		pageTitle: 'Orders',
+		message: 'No order found'
 	})
 }
 

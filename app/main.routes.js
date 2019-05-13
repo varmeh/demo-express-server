@@ -9,6 +9,9 @@ module.exports = app => {
 
 	// Setting up 404 message
 	app.use((_, res) => {
-		res.status(404).render('customer/404', { pageTitle: 'Page Not Found' })
+		res.status(404).render('customer/error-info', {
+			pageTitle: 'Page Not Found',
+			message: 'Page Not Found'
+		})
 	})
 }

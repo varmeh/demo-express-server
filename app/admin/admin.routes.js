@@ -4,7 +4,7 @@ const router = express.Router()
 
 const { newProduct, saveProduct, getProducts } = require('./admin.controller')
 
-router.get('/add-product', newProduct)
+router.get('/product/add', newProduct)
 
 router.post('/all', saveProduct)
 

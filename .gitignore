@@ -5,3 +5,4 @@ node_modules/
 # Runtime Files
 server.log
 products.json
+cart.json
