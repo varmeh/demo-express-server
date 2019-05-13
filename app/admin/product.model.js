@@ -18,12 +18,14 @@ const getProductsFromFile = cb => {
 
 module.exports = class Product {
 	constructor({
+		id = null,
 		title = '',
 		image = '',
 		description = 'A Book',
 		type = 'Books',
 		price = '9.99$'
 	}) {
+		this.id = id
 		this.title = title
 		this.image = image
 		this.type = type
@@ -31,15 +33,31 @@ module.exports = class Product {
 		this.description = description
 	}
 
+	writeToFile(products) {
+		fs.writeFile(file, JSON.stringify(products), err => {
+			if (err) {
+				console.error(`Write Failed: Product File: ${err.description}`)
+			}
+		})
+	}
+
 	save() {
-		this.id = uniqid()
+		if (this.id === null) {
+			this.id = uniqid()
+		}
 		getProductsFromFile(products => {
 			products.push(this)
-			fs.writeFile(file, JSON.stringify(products), err => {
-				if (err) {
-					console.error(`Write Failed: Product File: ${err.description}`)
-				}
-			})
+			this.writeToFile(products)
+		})
+	}
+
+	update() {
+		getProductsFromFile(products => {
+			const productIndex = products.findIndex(product => product.id === this.id)
+			const updatedProducts = [...products]
+			updatedProducts[productIndex] = this
+
+			this.writeToFile(updatedProducts)
 		})
 	}
 
