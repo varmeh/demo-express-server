@@ -1,4 +1,5 @@
 const Product = require('../admin/product.model')
+const Cart = require('../customer/cart.model')
 
 exports.getIndex = (_, res) => {
 	Product.fetchAll(products =>
@@ -31,7 +32,10 @@ exports.getCart = (_, res) => {
 }
 
 exports.addToCart = (req, res) => {
-	console.log(`Product id: ${req.body.productId}`)
+	Product.findById(req.body.productId, product => {
+		Cart.addProduct(product)
+	})
+	res.render('customer/cart', { pageTitle: 'Cart' })
 }
 
 exports.getOrders = (_, res) => {
