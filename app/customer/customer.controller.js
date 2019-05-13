@@ -21,13 +21,21 @@ exports.getProducts = (_, res) => {
 
 exports.getProductDetails = (req, res) => {
 	Product.findById(req.params.productId, product =>
-		res.render('customer/product-detail', { pageTitle: product.title, product })
+		res.render('customer/product-detail', {
+			pageTitle: product.title,
+			product
+		})
 	)
 }
 
 exports.getCart = (_, res) => {
-	res.render('customer/cart', {
-		pageTitle: 'Cart'
+	Cart.getCart(cart => {
+		res.render('customer/cart', {
+			pageTitle: 'Cart',
+			totalPrice: cart.totalPrice,
+			products: cart.products,
+			quantity: cart.quantity
+		})
 	})
 }
 
@@ -35,7 +43,7 @@ exports.addToCart = (req, res) => {
 	Product.findById(req.body.productId, product => {
 		Cart.addProduct(product)
 	})
-	res.render('customer/cart', { pageTitle: 'Cart' })
+	res.redirect('/')
 }
 
 exports.getOrders = (_, res) => {

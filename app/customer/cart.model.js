@@ -16,6 +16,14 @@ module.exports = class Cart {
         - totalPrice - number
     */
 
+	static save(cart) {
+		fs.writeFile(file, JSON.stringify(cart), err => {
+			if (err) {
+				console.error(`Write Failed: Cart File: ${err.description}`)
+			}
+		})
+	}
+
 	static addProduct(product) {
 		const { id } = product
 		// Fetch cart from file
@@ -36,11 +44,41 @@ module.exports = class Cart {
 			}
 			cart.totalPrice += Number(product.price)
 
-			fs.writeFile(file, JSON.stringify(cart), err => {
-				if (err) {
-					console.error(`Write Failed: Cart File: ${err.description}`)
-				}
-			})
+			Cart.save(cart)
+		})
+	}
+
+	/*
+		Removes product from cart.
+		Parameter:
+			- product object
+	*/
+	static removeProduct({ id, price }) {
+		// Fetch cart from file
+		fs.readFile(file, (err, fileContent) => {
+			if (err) {
+				return
+			}
+
+			let cart = JSON.parse(fileContent)
+
+			// Update total price
+			cart.totalPrice -= Number(price) * Number(cart.quantity[id])
+
+			// Remove quantity object
+			delete cart.quantity[id]
+
+			// Remove product from list
+			cart.products = cart.products.filter(p => p.id !== id)
+
+			// Save to cart
+			Cart.save(cart)
+		})
+	}
+
+	static getCart(cb) {
+		fs.readFile(file, (err, fileContent) => {
+			cb(err ? null : JSON.parse(fileContent))
 		})
 	}
 }

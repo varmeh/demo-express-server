@@ -1,15 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<%- include('../includes/head.ejs') %>
-		<link rel="stylesheet" href="/css/button.css" />
-	</head>
 
-	<body>
-		<%- include('../includes/navigation.ejs') %>
+<head>
+	<%- include('../includes/head.ejs') %>
+	<link rel="stylesheet" href="/css/button.css" />
+</head>
 
-		<main>
-			<h1>Empty Cart</h1>
-		</main>
-	</body>
+<body>
+	<%- include('../includes/navigation.ejs') %>
+
+	<main>
+		<% if (products.length > 0) { %>
+		<ul>
+			<% products.forEach(product => { %>
+			<li><%= product.title %> (<%= quantity[product.id] %>)</li>
+			<% }) %>
+		</ul>
+		<% } else { %>
+		<h1>Empty Cart</h1>
+		<% } %>
+	</main>
+</body>
+
 </html>
