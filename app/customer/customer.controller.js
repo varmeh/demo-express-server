@@ -1,5 +1,5 @@
-const Product = require('../admin/product.model')
-const Cart = require('../customer/cart.model')
+const Product = require('../models/product')
+const Cart = require('../models/cart')
 
 exports.getIndex = (_, res) => {
 	Product.fetchAll(products =>

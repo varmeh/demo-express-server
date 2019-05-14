@@ -53,7 +53,7 @@ module.exports = class Cart {
 		Parameter:
 			- product object
 	*/
-	static removeProduct({ id, price }) {
+	static removeProduct(id) {
 		// Fetch cart from file
 		fs.readFile(file, (err, fileContent) => {
 			if (err) {
@@ -62,8 +62,11 @@ module.exports = class Cart {
 
 			let cart = JSON.parse(fileContent)
 
+			// Get product information from products array
+			const product = cart.products.find(p => p.id === id)
+
 			// Update total price
-			cart.totalPrice -= Number(price) * Number(cart.quantity[id])
+			cart.totalPrice -= Number(product.price) * Number(cart.quantity[id])
 
 			// Remove quantity object
 			delete cart.quantity[id]
