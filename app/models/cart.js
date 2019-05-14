@@ -53,7 +53,7 @@ module.exports = class Cart {
 		Parameter:
 			- product object
 	*/
-	static removeProduct(id) {
+	static removeProduct(id, cb) {
 		// Fetch cart from file
 		fs.readFile(file, (err, fileContent) => {
 			if (err) {
@@ -76,6 +76,7 @@ module.exports = class Cart {
 
 			// Save to cart
 			Cart.save(cart)
+			cb()
 		})
 	}
 
