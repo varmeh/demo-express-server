@@ -29,7 +29,7 @@ app.use(express.static(path.join(__dirname, '..', 'public')))
 
 /* Setting up ejs template engine */
 app.set('view engine', 'ejs')
-app.set('views', 'views')
+app.set('views', 'app/views')
 
 /* Add routes */
 configureRoutes(app)
