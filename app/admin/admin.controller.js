@@ -56,7 +56,7 @@ exports.updateProduct = (req, res) => {
 			product.description = description
 			return product.save()
 		})
-		.then(() => res.redirect('/'))
+		.then(() => res.redirect('/admin/products'))
 		.catch(err => console.log(err))
 }
 
@@ -66,7 +66,7 @@ exports.deleteById = (req, res) => {
 			id: req.body.id
 		}
 	})
-		.then(() => res.redirect('/'))
+		.then(() => res.redirect('/admin/products'))
 		.catch(err =>
 			res.render('customer/error-info', {
 				pageTitle: 'Deletion Failed',
