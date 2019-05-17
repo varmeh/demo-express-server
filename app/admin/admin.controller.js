@@ -18,7 +18,12 @@ exports.saveProduct = (req, res) => {
 	const { title, image, price, description } = req.body
 	Product.create({ title, description, price, image })
 		.then(() => res.redirect('/'))
-		.catch(err => console.log(err))
+		.catch(err =>
+			res.render('customer/error-info', {
+				pageTitle: 'Save Product',
+				message: err.description
+			})
+		)
 }
 
 /* UI for editing existing product */
