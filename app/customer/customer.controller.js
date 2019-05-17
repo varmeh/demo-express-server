@@ -2,8 +2,8 @@ const Product = require('../models/product')
 const Cart = require('../models/cart')
 
 exports.getIndex = (_, res) => {
-	Product.fetchAll()
-		.then(([rows]) => {
+	Product.findAll()
+		.then(rows => {
 			res.render('customer/home', {
 				pageTitle: 'Home',
 				products: rows
@@ -13,8 +13,8 @@ exports.getIndex = (_, res) => {
 }
 
 exports.getProducts = (_, res) => {
-	Product.fetchAll()
-		.then(([rows]) => {
+	Product.findAll()
+		.then(rows => {
 			res.render('customer/product-list', {
 				pageTitle: 'Products',
 				products: rows
