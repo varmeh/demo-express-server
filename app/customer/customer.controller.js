@@ -3,10 +3,10 @@ const Cart = require('../models/cart')
 
 exports.getIndex = (_, res) => {
 	Product.findAll()
-		.then(rows => {
+		.then(products => {
 			res.render('customer/home', {
 				pageTitle: 'Home',
-				products: rows
+				products: products
 			})
 		})
 		.catch(err => console.log(err))
@@ -14,24 +14,22 @@ exports.getIndex = (_, res) => {
 
 exports.getProducts = (_, res) => {
 	Product.findAll()
-		.then(rows => {
+		.then(products => {
 			res.render('customer/product-list', {
 				pageTitle: 'Products',
-				products: rows
+				products: products
 			})
 		})
 		.catch(err => console.log(err))
 }
 
 exports.getProductDetails = (req, res) => {
-	Product.findById(req.params.productId)
-		.then(([rows]) => {
-			if (rows.length === 1) {
-				res.render('customer/product-detail', {
-					pageTitle: rows[0].title,
-					product: rows[0]
-				})
-			}
+	Product.findByPk(req.params.productId)
+		.then(product => {
+			res.render('customer/product-detail', {
+				pageTitle: product.title,
+				product: product
+			})
 		})
 		.catch(err => console.log(err))
 }
