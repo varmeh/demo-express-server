@@ -16,8 +16,7 @@ exports.newProduct = (_, res) => {
 /* Save new product in db */
 exports.saveProduct = (req, res) => {
 	const { title, image, price, description } = req.body
-	new Product({ title, image, price, description })
-		.save()
+	Product.create({ title, description, price, image })
 		.then(() => res.redirect('/'))
 		.catch(err => console.log(err))
 }
@@ -57,8 +56,8 @@ exports.deleteById = (req, res) => {
 }
 
 exports.getProducts = (_, res) => {
-	Product.fetchAll()
-		.then(([rows]) => {
+	Product.findAll()
+		.then(rows => {
 			res.render('admin/products', {
 				pageTitle: 'Admin Products',
 				products: rows
