@@ -8,6 +8,8 @@ const bodyParser = require('body-parser')
 const configureRoutes = require('./main.routes')
 const app = express()
 
+const sequelize = require('./util/database')
+
 /* Apply Middleware */
 app.use(morgan('common'))
 
@@ -34,7 +36,13 @@ app.set('views', 'app/views')
 /* Add routes */
 configureRoutes(app)
 
-const port = process.env.PORT || 8080
-app.listen(port, () => {
-	console.log(`Server on http://localhost:${port}`)
-})
+/* Sync all your sequelize models with database */
+sequelize
+	.sync()
+	.then(() => {
+		const port = process.env.PORT || 8080
+		app.listen(port, () => {
+			console.log(`Server on http://localhost:${port}`)
+		})
+	})
+	.catch(err => console.log(err))
