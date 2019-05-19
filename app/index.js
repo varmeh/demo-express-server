@@ -9,6 +9,7 @@ const configureRoutes = require('./main.routes')
 const app = express()
 
 const sequelize = require('./util/database')
+const { Product, User } = require('./models')
 
 /* Apply Middleware */
 app.use(morgan('common'))
@@ -35,6 +36,9 @@ app.set('views', 'app/views')
 
 /* Add routes */
 configureRoutes(app)
+
+/* Establish Sequelize models associations */
+User.hasMany(Product)
 
 /* Sync all your sequelize models with database */
 sequelize
