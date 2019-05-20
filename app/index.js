@@ -27,6 +27,16 @@ app.use(morgan('combined', { stream: accessLogStream }))
 app.use('/admin', bodyParser.urlencoded({ extended: false }))
 app.post('/cart/add', bodyParser.urlencoded({ extended: false }))
 
+/* Middleware to get default User Id */
+app.use((req, _, next) => {
+	User.findByPk(1)
+		.then(user => {
+			req.user = user
+			next()
+		})
+		.catch(err => console.log(err))
+})
+
 /* Opening api access to public folder */
 app.use(express.static(path.join(__dirname, '..', 'public')))
 
@@ -38,6 +48,7 @@ app.set('views', 'app/views')
 configureRoutes(app)
 
 /* Establish Sequelize models associations */
+Product.belongsTo(User, { constraints: true, onDelete: 'CASCADE' })
 User.hasMany(Product)
 
 /* Sync all your sequelize models with database */

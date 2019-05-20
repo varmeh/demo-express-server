@@ -15,8 +15,9 @@ exports.newProduct = (_, res) => {
 
 /* Save new product in db */
 exports.saveProduct = (req, res) => {
+	console.log(req.user)
 	const { title, image, price, description } = req.body
-	Product.create({ title, description, price, image })
+	Product.create({ title, description, price, image, userId: req.user.id })
 		.then(() => res.redirect('/'))
 		.catch(err =>
 			res.render('customer/error-info', {
