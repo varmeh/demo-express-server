@@ -9,7 +9,7 @@ const configureRoutes = require('./main.routes')
 const app = express()
 
 const sequelize = require('./util/database')
-const { Product, User } = require('./models')
+const { Product, User, Cart, CartItem } = require('./models')
 
 /* Apply Middleware */
 app.use(morgan('common'))
@@ -50,6 +50,9 @@ configureRoutes(app)
 /* Establish Sequelize models associations */
 Product.belongsTo(User, { constraints: true, onDelete: 'CASCADE' })
 User.hasMany(Product)
+User.hasOne(Cart)
+Cart.belongsToMany(Product, { through: CartItem })
+Product.belongsToMany(Cart, { through: CartItem })
 
 /* Sync all your sequelize models with database */
 sequelize
