@@ -1,5 +1,4 @@
-const Product = require('../models/product')
-const Cart = require('../models/cart')
+const { Product } = require('../models')
 
 exports.getIndex = (_, res) => {
 	Product.findAll()
@@ -34,15 +33,17 @@ exports.getProductDetails = (req, res) => {
 		.catch(err => console.log(err))
 }
 
-exports.getCart = (_, res) => {
-	Cart.getCart(cart => {
-		res.render('customer/cart', {
-			pageTitle: 'Cart',
-			totalPrice: cart.totalPrice,
-			products: cart.products,
-			quantity: cart.quantity
+exports.getCart = (req, res) => {
+	req.user
+		.getCart()
+		.then(cart => cart.getProducts())
+		.then(products => {
+			res.render('customer/cart', {
+				pageTitle: 'Cart',
+				products: products
+			})
 		})
-	})
+		.catch(err => console.log(err))
 }
 
 exports.addToCart = (req, res) => {
