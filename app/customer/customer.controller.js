@@ -96,12 +96,6 @@ exports.getOrders = (_, res) => {
 	})
 }
 
-exports.getCheckout = (_, res) => {
-	res.render('customer/checkout', {
-		pageTitle: 'Checkout'
-	})
-}
-
 exports.postOrder = (req, res) => {
 	let fetchedCart, cartProducts
 	req.user

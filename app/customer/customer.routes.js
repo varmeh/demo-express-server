@@ -8,7 +8,6 @@ const {
 	getProductDetails,
 	getCart,
 	addToCart,
-	getCheckout,
 	getOrders,
 	removeProductFromCart,
 	postOrder
@@ -27,8 +26,6 @@ router.post('/cart/add', addToCart)
 router.post('/order/create', postOrder)
 
 router.get('/orders', getOrders)
-
-router.get('/checkout', getCheckout)
 
 router.post('/cart/remove', removeProductFromCart)
 
