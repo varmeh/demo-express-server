@@ -1,5 +1,4 @@
-const Product = require('../models/product')
-const Cart = require('../models/cart')
+const { Product, Cart } = require('../models')
 
 const defaultImageUrl =
 	'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1s6Ti-mWnvN1RZuZP1QKbAYheT_YShWNyKdRgxBYebXTaucYR'
@@ -88,5 +87,13 @@ exports.getProducts = (_, res) => {
 }
 
 exports.removeProductFromCart = (req, res) => {
-	Cart.removeProduct(req.body.id, () => res.redirect('/cart'))
+	req.user
+		.getCart()
+		.then(cart => cart.getProducts({ where: { id: req.body.id } }))
+		.then(products => products[0].cartItem.destroy())
+		.then(result => {
+			console.log(result)
+			res.redirect('/cart')
+		})
+		.catch(err => console.log(err))
 }

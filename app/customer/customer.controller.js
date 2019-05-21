@@ -47,10 +47,34 @@ exports.getCart = (req, res) => {
 }
 
 exports.addToCart = (req, res) => {
-	Product.findById(req.body.productId, product => {
-		Cart.addProduct(product)
-	})
-	res.redirect('/')
+	let fetchedCart
+	let newQuantity = 1
+	req.user
+		.getCart()
+		.then(cart => {
+			fetchedCart = cart
+			return cart.getProducts({
+				where: {
+					id: req.body.productId
+				}
+			})
+		})
+		.then(products => {
+			if (products.length === 1) {
+				// Product already in Cart. Update quantity
+				newQuantity = products[0].cartItem.quantity + 1
+				return products[0]
+			}
+			// find product
+			return Product.findByPk(req.body.productId)
+		})
+		.then(product => {
+			return fetchedCart.addProduct(product, {
+				through: { quantity: newQuantity }
+			})
+		})
+		.then(() => res.redirect('/cart'))
+		.catch(err => console.log(err))
 }
 
 exports.getOrders = (_, res) => {
