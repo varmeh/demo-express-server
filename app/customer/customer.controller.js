@@ -77,6 +77,18 @@ exports.addToCart = (req, res) => {
 		.catch(err => console.log(err))
 }
 
+exports.removeProductFromCart = (req, res) => {
+	req.user
+		.getCart()
+		.then(cart => cart.getProducts({ where: { id: req.body.id } }))
+		.then(products => products[0].cartItem.destroy())
+		.then(result => {
+			console.log(result)
+			res.redirect('/cart')
+		})
+		.catch(err => console.log(err))
+}
+
 exports.getOrders = (_, res) => {
 	res.render('customer/error-info', {
 		pageTitle: 'Orders',

@@ -8,8 +8,7 @@ const {
 	editProduct,
 	updateProduct,
 	deleteById,
-	getProducts,
-	removeProductFromCart
+	getProducts
 } = require('./admin.controller')
 
 router.get('/product/new', newProduct)
@@ -24,5 +23,4 @@ router.delete('/product/delete', deleteById) // Caters to AJAX delete request
 
 router.get('/products', getProducts)
 
-router.post('/cart/remove', removeProductFromCart)
 module.exports = router

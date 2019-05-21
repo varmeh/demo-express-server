@@ -25,7 +25,7 @@ app.use(morgan('combined', { stream: accessLogStream }))
 
 /* Configure request body parser on different routes */
 app.use('/admin', bodyParser.urlencoded({ extended: false }))
-app.post('/cart/add', bodyParser.urlencoded({ extended: false }))
+app.post('/cart/*', bodyParser.urlencoded({ extended: false }))
 
 /* Middleware to get default User Id */
 app.use((req, _, next) => {
