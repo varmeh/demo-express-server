@@ -101,3 +101,28 @@ exports.getCheckout = (_, res) => {
 		pageTitle: 'Checkout'
 	})
 }
+
+exports.postOrder = (req, res) => {
+	let fetchedCart, cartProducts
+	req.user
+		.getCart()
+		.then(cart => {
+			fetchedCart = cart
+			return cart.getProducts()
+		})
+		.then(products => {
+			cartProducts = products
+			return req.user.createOrder()
+		})
+		.then(order =>
+			order.addProducts(
+				cartProducts.map(product => {
+					product.orderItem = { quantity: product.cartItem.quantity }
+					return product
+				})
+			)
+		)
+		.then(() => fetchedCart.setProducts(null))
+		.then(() => res.redirect('/orders'))
+		.catch(err => console.log(err))
+}

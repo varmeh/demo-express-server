@@ -10,7 +10,7 @@
 <body>
 	<%- include('../includes/navigation.ejs') %>
 
-	<main>
+	<main class="margin">
 		<% if (products.length > 0) { %>
 		<ul class="cart__item-list">
 			<% products.forEach(product => { %>
@@ -24,6 +24,11 @@
 			</li>
 			<% }) %>
 		</ul>
+		<div class="centered">
+			<form action="/order/create" method="POST">
+				<button type="submit" class="btn">Order Now!</button>
+			</form>
+		</div>
 		<% } else { %>
 		<h1>Empty Cart</h1>
 		<% } %>

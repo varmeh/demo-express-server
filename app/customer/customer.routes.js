@@ -10,7 +10,8 @@ const {
 	addToCart,
 	getCheckout,
 	getOrders,
-	removeProductFromCart
+	removeProductFromCart,
+	postOrder
 } = require('./customer.controller')
 
 router.get('/', getIndex)
@@ -22,6 +23,8 @@ router.get('/details/:productId', getProductDetails)
 router.get('/cart', getCart)
 
 router.post('/cart/add', addToCart)
+
+router.post('/order/create', postOrder)
 
 router.get('/orders', getOrders)
 

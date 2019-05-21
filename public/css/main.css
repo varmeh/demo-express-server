@@ -63,6 +63,11 @@ form {
 	align-items: stretch;
 }
 
+.centered {
+	text-align: center;
+	margin-top: 2rem;
+}
+
 /* Mobile Navigation */
 .mobile-nav {
 	width: 30rem;
