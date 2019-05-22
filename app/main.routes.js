@@ -5,7 +5,7 @@ const adminRoutes = require('./admin/admin.routes')
 module.exports = app => {
 	// Add admin routes have base url - /admin/*
 	app.use('/admin', adminRoutes)
-	app.use(customerRoutes)
+	// app.use(customerRoutes)
 
 	// Setting up 404 message
 	app.use((_, res) => {
