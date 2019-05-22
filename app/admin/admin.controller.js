@@ -59,18 +59,14 @@ exports.postUpdateProduct = (req, res) => {
 }
 
 exports.deleteById = (req, res) => {
-	// Product.destroy({
-	// 	where: {
-	// 		id: req.body.id
-	// 	}
-	// })
-	// 	.then(() => res.redirect('/admin/products'))
-	// 	.catch(err =>
-	// 		res.render('customer/error-info', {
-	// 			pageTitle: 'Deletion Failed',
-	// 			message: err.description
-	// 		})
-	// 	)
+	Product.deleteById(req.body.id)
+		.then(() => res.redirect('/admin/products'))
+		.catch(err =>
+			res.render('customer/error-info', {
+				pageTitle: 'Deletion Failed',
+				message: err.description
+			})
+		)
 }
 
 exports.getProducts = (_, res) => {
