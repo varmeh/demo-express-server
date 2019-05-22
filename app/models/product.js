@@ -18,19 +18,14 @@ class Product {
 
 	save() {
 		const db = getdb()
-		let dbOp
 		if (this._id) {
 			// Update product
-			dbOp = db
+			return db
 				.collection('products')
 				.updateOne({ _id: this._id }, { $set: this })
-		} else {
-			// Save Product
-			dbOp = db.collection('products').insertOne(this)
 		}
-		return dbOp
-			.then(result => console.log('save result: ', result))
-			.catch(err => console.log(err))
+		// Save Product
+		return db.collection('products').insertOne(this)
 	}
 
 	static fetchAll() {
@@ -38,11 +33,6 @@ class Product {
 			.collection('products')
 			.find()
 			.toArray()
-			.then(products => {
-				console.log('all products: ', products)
-				return products
-			})
-			.catch(err => console.log(err))
 	}
 
 	static findById(id) {
@@ -50,19 +40,12 @@ class Product {
 			.collection('products')
 			.find({ _id: mongodb.ObjectID(id) })
 			.next()
-			.then(product => {
-				console.log(`Product with ${id}: `, product)
-				return product
-			})
-			.catch(err => console.log(err))
 	}
 
 	static deleteById(id) {
 		return getdb()
 			.collection('products')
 			.deleteOne({ _id: new mongodb.ObjectId(id) })
-			.then(result => console.log(`Deletion of #${id} Successful: `, result))
-			.catch(err => console.log(err))
 	}
 }
 

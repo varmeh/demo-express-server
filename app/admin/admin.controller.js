@@ -21,12 +21,13 @@ exports.postNewProduct = (req, res) => {
 		.save()
 		.then(result => console.log(result))
 		.then(() => res.redirect('/'))
-		.catch(err =>
+		.catch(err => {
+			console.log(err)
 			res.render('customer/error-info', {
 				pageTitle: 'New Product Error',
 				message: err.description
 			})
-		)
+		})
 }
 
 /* UI for editing existing product */
@@ -40,6 +41,7 @@ exports.editProduct = (req, res) => {
 			})
 		})
 		.catch(err => {
+			console.log(err)
 			res.render('customer/error-info', {
 				pageTitle: 'Missing Product',
 				message: err.description
@@ -49,9 +51,7 @@ exports.editProduct = (req, res) => {
 
 /* Update existing product in db */
 exports.postUpdateProduct = (req, res) => {
-	// const { id } = req.body
-
-	const updatedProduct = new Product({ ...req.body })
+	const updatedProduct = new Product(req.body)
 	updatedProduct
 		.save()
 		.then(() => res.redirect('/admin/products'))
@@ -77,5 +77,5 @@ exports.getProducts = (_, res) => {
 				products: products
 			})
 		})
-		.catch(() => {})
+		.catch(err => console.log(err))
 }

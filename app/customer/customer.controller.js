@@ -8,7 +8,7 @@ exports.getIndex = (_, res) => {
 				products: products
 			})
 		})
-		.catch(() => {})
+		.catch(err => console.log(err))
 }
 
 exports.getProducts = (_, res) => {
@@ -19,7 +19,7 @@ exports.getProducts = (_, res) => {
 				products: products
 			})
 		})
-		.catch(() => {})
+		.catch(err => console.log(err))
 }
 
 exports.getProductDetails = (req, res) => {
@@ -30,7 +30,7 @@ exports.getProductDetails = (req, res) => {
 				product: product
 			})
 		})
-		.catch(() => {})
+		.catch(err => console.log(err))
 }
 
 exports.getCart = (req, res) => {
