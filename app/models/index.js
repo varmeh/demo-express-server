@@ -1,4 +1,4 @@
-// const Product = require('./product')
+const Product = require('./product')
 // const User = require('./user')
 // const Cart = require('./cart')
 // const CartItem = require('./cart-item')
@@ -6,7 +6,7 @@
 // const OrderItem = require('./order-item')
 
 module.exports = {
-	// Product
+	Product
 	// 	User,
 	// 	Cart,
 	// 	CartItem,
