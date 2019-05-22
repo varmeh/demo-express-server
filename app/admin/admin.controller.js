@@ -7,7 +7,7 @@ const defaultImageUrl =
 exports.newProduct = (_, res) => {
 	res.render('admin/edit-product', {
 		pageTitle: 'Add Product',
-		url: defaultImageUrl,
+		defaultUrl: defaultImageUrl,
 		edit: false
 	})
 }

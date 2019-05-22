@@ -13,7 +13,7 @@ class Product {
 		this.price = price
 		this.description = description
 		this.image = image
-		this._id = mongodb.ObjectID(id)
+		this._id = id ? new mongodb.ObjectID(id) : null
 	}
 
 	save() {
@@ -23,7 +23,7 @@ class Product {
 			// Update product
 			dbOp = db
 				.collection('products')
-				.updateOne({ _id: mongodb.ObjectID(this._id) }, { $set: this })
+				.updateOne({ _id: this._id }, { $set: this })
 		} else {
 			// Save Product
 			dbOp = db.collection('products').insertOne(this)
