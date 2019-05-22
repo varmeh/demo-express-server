@@ -13,7 +13,7 @@ exports.newProduct = (_, res) => {
 }
 
 /* Save new product in db */
-exports.saveProduct = (req, res) => {
+exports.postNewProduct = (req, res) => {
 	const { title, image, price, description } = req.body
 	const product = new Product({ title, image, price, description })
 
@@ -31,36 +31,31 @@ exports.saveProduct = (req, res) => {
 
 /* UI for editing existing product */
 exports.editProduct = (req, res) => {
-	// Product.findByPk(req.params.id)
-	// 	.then(product => {
-	// 		res.render('admin/edit-product', {
-	// 			pageTitle: 'Edit Product',
-	// 			url: product.image,
-	// 			product: product,
-	// 			edit: true
-	// 		})
-	// 	})
-	// 	.catch(err => {
-	// 		res.render('customer/error-info', {
-	// 			pageTitle: 'Missing Product',
-	// 			message: err.description
-	// 		})
-	// 	})
+	Product.findById(req.params.id)
+		.then(product => {
+			res.render('admin/edit-product', {
+				pageTitle: 'Edit Product',
+				product: product,
+				edit: true
+			})
+		})
+		.catch(err => {
+			res.render('customer/error-info', {
+				pageTitle: 'Missing Product',
+				message: err.description
+			})
+		})
 }
 
 /* Update existing product in db */
-exports.updateProduct = (req, res) => {
-	// const { id, title, image, price, description } = req.body
-	// Product.findByPk(id)
-	// 	.then(product => {
-	// 		product.title = title
-	// 		product.image = image
-	// 		product.price = price
-	// 		product.description = description
-	// 		return product.save()
-	// 	})
-	// 	.then(() => res.redirect('/admin/products'))
-	// 	.catch(err => console.log(err))
+exports.postUpdateProduct = (req, res) => {
+	// const { id } = req.body
+
+	const updatedProduct = new Product({ ...req.body })
+	updatedProduct
+		.save()
+		.then(() => res.redirect('/admin/products'))
+		.catch(err => console.log(err))
 }
 
 exports.deleteById = (req, res) => {

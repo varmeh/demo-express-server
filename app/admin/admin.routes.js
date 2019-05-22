@@ -4,18 +4,18 @@ const router = express.Router()
 
 const {
 	newProduct,
-	saveProduct,
+	postNewProduct,
 	editProduct,
-	updateProduct,
+	postUpdateProduct,
 	deleteById,
 	getProducts
 } = require('./admin.controller')
 
 router.get('/product/new', newProduct)
-router.post('/product/add', saveProduct)
+router.post('/product/add', postNewProduct)
 
 router.get('/product/edit/:id', editProduct)
-router.post('/product/update', updateProduct)
+router.post('/product/update', postUpdateProduct)
 
 // Web forms don't support delete method
 router.post('/product/delete', deleteById) // Caters to delete request from web forms
