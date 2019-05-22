@@ -23,14 +23,14 @@ exports.getProducts = (_, res) => {
 }
 
 exports.getProductDetails = (req, res) => {
-	// Product.findByPk(req.params.productId)
-	// 	.then(product => {
-	// 		res.render('customer/product-detail', {
-	// 			pageTitle: product.title,
-	// 			product: product
-	// 		})
-	// 	})
-	// 	.catch(err => console.log(err))
+	Product.findById(req.params.productId)
+		.then(product => {
+			res.render('customer/product-detail', {
+				pageTitle: product.title,
+				product: product
+			})
+		})
+		.catch(() => {})
 }
 
 exports.getCart = (req, res) => {

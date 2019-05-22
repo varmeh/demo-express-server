@@ -1,3 +1,4 @@
+const mongodb = require('mongodb')
 const { getdb } = require('../util/database')
 
 class Product {
@@ -12,7 +13,7 @@ class Product {
 		return getdb()
 			.collection('products')
 			.insertOne(this)
-			.then(result => console.log(result))
+			.then(result => console.log('save result: ', result))
 			.catch(err => console.log(err))
 	}
 
@@ -22,8 +23,20 @@ class Product {
 			.find()
 			.toArray()
 			.then(products => {
-				console.log(products)
+				console.log('all products: ', products)
 				return products
+			})
+			.catch(err => console.log(err))
+	}
+
+	static findById(id) {
+		return getdb()
+			.collection('products')
+			.find({ _id: mongodb.ObjectID(id) })
+			.next()
+			.then(product => {
+				console.log(`Product with ${id}: `, product)
+				return product
 			})
 			.catch(err => console.log(err))
 	}
