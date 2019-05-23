@@ -27,7 +27,14 @@ app.use(morgan('combined', { stream: accessLogStream }))
 app.use((req, _, next) => {
 	User.findById('5ce557ce7854fe75f8f91c31')
 		.then(user => {
-			req.user = user
+			// NOTE: user object from db just has data in it.
+			// To get access to User Model methods, create a new User
+			req.user = new User({
+				username: user.username,
+				email: user.email,
+				cart: user.cart,
+				id: user._id
+			})
 			next()
 		})
 		.catch(err => {
