@@ -9,6 +9,7 @@ const configureRoutes = require('./main.routes')
 const app = express()
 
 const { mongoConnect } = require('./util/database')
+const { User } = require('./models')
 
 /* Apply Middleware */
 app.use(morgan('common'))
@@ -21,6 +22,19 @@ var accessLogStream = fs.createWriteStream(
 	}
 )
 app.use(morgan('combined', { stream: accessLogStream }))
+
+/* Demo User Integration */
+app.use((req, _, next) => {
+	User.findById('5ce557ce7854fe75f8f91c31')
+		.then(user => {
+			req.user = user
+			next()
+		})
+		.catch(err => {
+			console.log(err)
+			next()
+		})
+})
 
 /* Configure request body parser on different routes */
 app.use('/admin', bodyParser.urlencoded({ extended: false }))

@@ -15,7 +15,13 @@ exports.newProduct = (_, res) => {
 /* Save new product in db */
 exports.postNewProduct = (req, res) => {
 	const { title, image, price, description } = req.body
-	const product = new Product({ title, image, price, description })
+	const product = new Product({
+		title,
+		image,
+		price,
+		description,
+		userId: req.user._id
+	})
 
 	product
 		.save()

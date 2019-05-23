@@ -7,13 +7,15 @@ class Product {
 		price = 9,
 		description = 'A book',
 		image = '',
-		id = null
+		id = null,
+		userId = ''
 	}) {
 		this.title = title
 		this.price = price
 		this.description = description
 		this.image = image
 		this._id = id ? new mongodb.ObjectID(id) : null
+		this.userId = userId
 	}
 
 	save() {
