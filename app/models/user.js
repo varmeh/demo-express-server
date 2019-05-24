@@ -60,12 +60,21 @@ class User {
 			updatedCartItems.push({ productId: product._id, quantity: 1 })
 		}
 
-		const updatedCart = {
-			items: updatedCartItems
-		}
+		return this.updateCartItems(updatedCartItems)
+	}
+
+	deleteFromCart(id) {
+		const updatedCartItems = this.cart.items.filter(
+			i => i.productId.toString() !== id.toString()
+		)
+
+		return this.updateCartItems(updatedCartItems)
+	}
+
+	updateCartItems(cartItems) {
 		return getdb()
 			.collection(collectionName)
-			.updateOne({ _id: this._id }, { $set: { cart: updatedCart } })
+			.updateOne({ _id: this._id }, { $set: { cart: { items: cartItems } } })
 	}
 }
 

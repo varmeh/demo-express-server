@@ -56,15 +56,13 @@ exports.addToCart = (req, res) => {
 }
 
 exports.removeProductFromCart = (req, res) => {
-	// req.user
-	// 	.getCart()
-	// 	.then(cart => cart.getProducts({ where: { id: req.body.id } }))
-	// 	.then(products => products[0].cartItem.destroy())
-	// 	.then(result => {
-	// 		console.log(result)
-	// 		res.redirect('/cart')
-	// 	})
-	// 	.catch(err => console.log(err))
+	req.user
+		.deleteFromCart(req.body.id)
+		.then(result => {
+			console.log(result)
+			res.redirect('/cart')
+		})
+		.catch(err => console.log(err))
 }
 
 exports.getOrders = (req, res) => {
