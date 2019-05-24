@@ -37,41 +37,48 @@ exports.postNewProduct = (req, res) => {
 
 /* UI for editing existing product */
 exports.editProduct = (req, res) => {
-	// Product.findById(req.params.id)
-	// 	.then(product => {
-	// 		res.render('admin/edit-product', {
-	// 			pageTitle: 'Edit Product',
-	// 			product: product,
-	// 			edit: true
-	// 		})
-	// 	})
-	// 	.catch(err => {
-	// 		console.log(err)
-	// 		res.render('customer/error-info', {
-	// 			pageTitle: 'Missing Product',
-	// 			message: err.description
-	// 		})
-	// 	})
+	Product.findById(req.params.id)
+		.then(product => {
+			res.render('admin/edit-product', {
+				pageTitle: 'Edit Product',
+				product: product,
+				edit: true
+			})
+		})
+		.catch(err => {
+			console.log(err)
+			res.render('customer/error-info', {
+				pageTitle: 'Missing Product',
+				message: err.description
+			})
+		})
 }
 
 /* Update existing product in db */
 exports.postUpdateProduct = (req, res) => {
-	// const updatedProduct = new Product(req.body)
-	// updatedProduct
-	// 	.save()
-	// 	.then(() => res.redirect('/admin/products'))
-	// 	.catch(err => console.log(err))
+	const { title, description, imageUrl, price, id } = req.body
+	Product.findById(id)
+		.then(product => {
+			product.title = title
+			product.description = description
+			product.price = price
+			product.imageUrl = imageUrl
+
+			return product.save()
+		})
+		.then(() => res.redirect('/admin/products'))
+		.catch(err => console.log(err))
 }
 
 exports.deleteById = (req, res) => {
-	// Product.deleteById(req.body.id)
-	// 	.then(() => res.redirect('/admin/products'))
-	// 	.catch(err =>
-	// 		res.render('customer/error-info', {
-	// 			pageTitle: 'Deletion Failed',
-	// 			message: err.description
-	// 		})
-	// 	)
+	Product.findByIdAndRemove(req.body.id)
+		.then(() => res.redirect('/admin/products'))
+		.catch(err =>
+			res.render('customer/error-info', {
+				pageTitle: 'Deletion Failed',
+				message: err.description
+			})
+		)
 }
 
 exports.getProducts = (_, res) => {
