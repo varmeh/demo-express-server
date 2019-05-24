@@ -1,12 +1,15 @@
 {
 	"env": {
-		"browser": true,
-		"commonjs": true,
-		"es6": true
+		"es6": true,
+		"node": true
 	},
 	"extends": "eslint:recommended",
 	"parserOptions": {
-		"sourceType": "module"
+		"sourceType": "module",
+		"ecmaversion": 6,
+		"ecmaFeatures": {
+			"experimentalObjectRestSpread": true
+		}
 	},
 	"rules": {
 		"no-console": 0,
