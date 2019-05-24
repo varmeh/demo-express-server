@@ -100,7 +100,13 @@ class User {
 			})
 	}
 
-	getOrders() {}
+	getOrders() {
+		return getdb()
+			.collection(collections.orders)
+			.find({ 'user._id': this._id })
+			.sort({ _id: -1 })
+			.toArray()
+	}
 }
 
 module.exports = User

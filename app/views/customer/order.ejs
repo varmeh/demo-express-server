@@ -11,13 +11,13 @@
 
     <main class="margin">
         <% if (orders.length > 0) { %>
-        <ul>
+        <ul class="cart__item-list">
             <% orders.forEach(order => { %>
-            <li>
-                <h1># <%= order.id %></h1>
+            <li class="cart__item">
+                <h1># <%= order._id %></h1>
                 <ul>
-                    <% order.products.forEach(product => { %>
-                    <li><%= product.title %> (<%= product.orderItem.quantity %>)</li>
+                    <% order.items.forEach(item => { %>
+                    <li><%= item.title %> (<%= item.quantity %>)</li>
                     <% }) %>
                 </ul>
             </li>

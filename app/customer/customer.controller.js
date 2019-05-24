@@ -66,15 +66,15 @@ exports.removeProductFromCart = (req, res) => {
 }
 
 exports.getOrders = (req, res) => {
-	// req.user
-	// 	.getOrders({ include: 'products', order: [['id', 'DESC']] })
-	// 	.then(orders => {
-	// 		res.render('customer/order', {
-	// 			pageTitle: 'Orders',
-	// 			orders: orders
-	// 		})
-	// 	})
-	// 	.catch(err => console.log(err))
+	req.user
+		.getOrders()
+		.then(orders => {
+			res.render('customer/order', {
+				pageTitle: 'Orders',
+				orders: orders
+			})
+		})
+		.catch(err => console.log(err))
 }
 
 exports.postOrder = (req, res) => {
