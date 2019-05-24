@@ -30,7 +30,7 @@ app.use((req, _, next) => {
 			// NOTE: user object from db just has data in it.
 			// To get access to User Model methods, create a new User
 			req.user = new User({
-				username: user.username,
+				name: user.name,
 				email: user.email,
 				cart: user.cart,
 				id: user._id

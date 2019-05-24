@@ -3,8 +3,8 @@ const { getdb } = require('../util/database')
 
 const collectionName = 'users'
 class User {
-	constructor({ username = '', email = '', cart = { items: [] }, id = null }) {
-		this.username = username
+	constructor({ name = '', email = '', cart = { items: [] }, id = null }) {
+		this.name = name
 		this.email = email
 		this.cart = cart
 		this._id = id
@@ -76,6 +76,31 @@ class User {
 			.collection(collectionName)
 			.updateOne({ _id: this._id }, { $set: { cart: { items: cartItems } } })
 	}
+
+	/* Methods for order addition */
+	addOrder() {
+		return this.getCartProducts()
+			.then(products => {
+				const order = {
+					user: {
+						_id: this._id,
+						name: this.name,
+						email: this.email
+					},
+					items: products
+				}
+				return getdb()
+					.collection('orders')
+					.insertOne(order)
+			})
+			.then(result => {
+				console.log(result)
+				this.cart = { items: [] }
+				return this.updateCartItems([])
+			})
+	}
+
+	getOrders() {}
 }
 
 module.exports = User
