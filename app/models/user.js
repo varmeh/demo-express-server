@@ -1,7 +1,7 @@
 const { ObjectID } = require('mongodb')
 const { getdb } = require('../util/database')
 
-const collectionName = 'users'
+const collections = require('./collections')
 class User {
 	constructor({ name = '', email = '', cart = { items: [] }, id = null }) {
 		this.name = name
@@ -12,13 +12,13 @@ class User {
 
 	save() {
 		return getdb()
-			.collection(collectionName)
+			.collection(collections.users)
 			.insertOne(this)
 	}
 
 	static findById(userId) {
 		return getdb()
-			.collection(collectionName)
+			.collection(collections.users)
 			.find({ _id: new ObjectID(userId) })
 			.next()
 	}
@@ -32,7 +32,7 @@ class User {
 		})
 
 		return getdb()
-			.collection('products')
+			.collection(collections.products)
 			.find({ _id: { $in: productIds } })
 			.toArray()
 			.then(products =>
@@ -73,7 +73,7 @@ class User {
 
 	updateCartItems(cartItems) {
 		return getdb()
-			.collection(collectionName)
+			.collection(collections.users)
 			.updateOne({ _id: this._id }, { $set: { cart: { items: cartItems } } })
 	}
 
@@ -90,7 +90,7 @@ class User {
 					items: products
 				}
 				return getdb()
-					.collection('orders')
+					.collection(collections.orders)
 					.insertOne(order)
 			})
 			.then(result => {
