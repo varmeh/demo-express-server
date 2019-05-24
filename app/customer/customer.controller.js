@@ -1,25 +1,25 @@
 const { Product } = require('../models')
 
 exports.getIndex = (_, res) => {
-	// Product.fetchAll()
-	// 	.then(products => {
-	// 		res.render('customer/home', {
-	// 			pageTitle: 'Home',
-	// 			products: products
-	// 		})
-	// 	})
-	// 	.catch(err => console.log(err))
+	Product.find()
+		.then(products => {
+			res.render('customer/home', {
+				pageTitle: 'Home',
+				products: products
+			})
+		})
+		.catch(err => console.log(err))
 }
 
 exports.getProducts = (_, res) => {
-	// Product.fetchAll()
-	// 	.then(products => {
-	// 		res.render('customer/product-list', {
-	// 			pageTitle: 'Products',
-	// 			products: products
-	// 		})
-	// 	})
-	// 	.catch(err => console.log(err))
+	Product.find()
+		.then(products => {
+			res.render('customer/product-list', {
+				pageTitle: 'Products',
+				products: products
+			})
+		})
+		.catch(err => console.log(err))
 }
 
 exports.getProductDetails = (req, res) => {

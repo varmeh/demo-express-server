@@ -14,25 +14,25 @@ exports.newProduct = (_, res) => {
 
 /* Save new product in db */
 exports.postNewProduct = (req, res) => {
-	// const { title, image, price, description } = req.body
-	// const product = new Product({
-	// 	title,
-	// 	image,
-	// 	price,
-	// 	description,
-	// 	userId: req.user._id
-	// })
-	// product
-	// 	.save()
-	// 	.then(result => console.log(result))
-	// 	.then(() => res.redirect('/'))
-	// 	.catch(err => {
-	// 		console.log(err)
-	// 		res.render('customer/error-info', {
-	// 			pageTitle: 'New Product Error',
-	// 			message: err.description
-	// 		})
-	// 	})
+	const { title, imageUrl, price, description } = req.body
+	new Product({
+		title,
+		imageUrl,
+		price,
+		description
+	})
+		.save()
+		.then(result => {
+			console.log(result)
+			res.redirect('/')
+		})
+		.catch(err => {
+			console.log(err)
+			res.render('customer/error-info', {
+				pageTitle: 'New Product Error',
+				message: err.description
+			})
+		})
 }
 
 /* UI for editing existing product */
@@ -75,12 +75,12 @@ exports.deleteById = (req, res) => {
 }
 
 exports.getProducts = (_, res) => {
-	// Product.fetchAll()
-	// 	.then(products => {
-	// 		res.render('admin/products', {
-	// 			pageTitle: 'Admin Products',
-	// 			products: products
-	// 		})
-	// 	})
-	// 	.catch(err => console.log(err))
+	Product.find()
+		.then(products => {
+			res.render('admin/products', {
+				pageTitle: 'Admin Products',
+				products: products
+			})
+		})
+		.catch(err => console.log(err))
 }

@@ -1,26 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<%- include('../includes/head.ejs') %>
-		<link rel="stylesheet" href="/css/details.css" />
-		<link rel="stylesheet" href="/css/button.css" />
-	</head>
 
-	<body>
-		<%- include('../includes/navigation.ejs') %>
-		<main class="centered">
-			<h1><%= product.title %></h1>
-			<hr />
-			<div>
-				<img src="<%= product.image %>" alt="<%= product.title %>" />
-			</div>
-			<h2><%= product.price %>$</h2>
-			<p><%= product.description %></p>
+<head>
+	<%- include('../includes/head.ejs') %>
+	<link rel="stylesheet" href="/css/details.css" />
+	<link rel="stylesheet" href="/css/button.css" />
+</head>
 
-			<div class="card__actions">
-				<a href="/products" class="btn">Back</a>
-				<%- include('../includes/add-to-cart.ejs', { product: product}) %>
-			</div>
-		</main>
-	</body>
+<body>
+	<%- include('../includes/navigation.ejs') %>
+	<main class="centered">
+		<h1><%= product.title %></h1>
+		<hr />
+		<div>
+			<img src="<%= product.imageUrl %>" alt="<%= product.title %>" />
+		</div>
+		<h2><%= product.price %>$</h2>
+		<p><%= product.description %></p>
+
+		<div class="card__actions">
+			<a href="/products" class="btn">Back</a>
+			<%- include('../includes/add-to-cart.ejs', { product: product}) %>
+		</div>
+	</main>
+</body>
+
 </html>

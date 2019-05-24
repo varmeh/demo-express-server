@@ -1,55 +1,78 @@
-const mongodb = require('mongodb')
-const { getdb } = require('../util/database')
+const { Schema, model } = require('mongoose')
 
-const collections = require('./collections')
-class Product {
-	constructor({
-		title = '',
-		price = 9,
-		description = 'A book',
-		image = '',
-		id = null,
-		userId = ''
-	}) {
-		this.title = title
-		this.price = price
-		this.description = description
-		this.image = image
-		this._id = id ? new mongodb.ObjectID(id) : null
-		this.userId = userId
+const productSchema = new Schema({
+	title: {
+		type: String,
+		required: true
+	},
+	description: {
+		type: String,
+		required: true
+	},
+	price: {
+		type: Number,
+		required: true
+	},
+	imageUrl: {
+		type: String,
+		required: true
 	}
+})
 
-	save() {
-		const db = getdb()
-		if (this._id) {
-			// Update product
-			return db
-				.collection(collections.products)
-				.updateOne({ _id: this._id }, { $set: this })
-		}
-		// Save Product
-		return db.collection(collections.products).insertOne(this)
-	}
+module.exports = model('Product', productSchema)
 
-	static fetchAll() {
-		return getdb()
-			.collection(collections.products)
-			.find()
-			.toArray()
-	}
+// const mongodb = require('mongodb')
+// const { getdb } = require('../util/database')
 
-	static findById(id) {
-		return getdb()
-			.collection(collections.products)
-			.find({ _id: mongodb.ObjectID(id) })
-			.next()
-	}
+// const collections = require('./collections')
+// class Product {
+// 	constructor({
+// 		title = '',
+// 		price = 9,
+// 		description = 'A book',
+// 		image = '',
+// 		id = null,
+// 		userId = ''
+// 	}) {
+// 		this.title = title
+// 		this.price = price
+// 		this.description = description
+// 		this.image = image
+// 		this._id = id ? new mongodb.ObjectID(id) : null
+// 		this.userId = userId
+// 	}
 
-	static deleteById(id) {
-		return getdb()
-			.collection(collections.products)
-			.deleteOne({ _id: new mongodb.ObjectId(id) })
-	}
-}
+// 	save() {
+// 		const db = getdb()
+// 		if (this._id) {
+// 			// Update product
+// 			return db
+// 				.collection(collections.products)
+// 				.updateOne({ _id: this._id }, { $set: this })
+// 		}
+// 		// Save Product
+// 		return db.collection(collections.products).insertOne(this)
+// 	}
 
-module.exports = Product
+// 	static fetchAll() {
+// 		return getdb()
+// 			.collection(collections.products)
+// 			.find()
+// 			.toArray()
+// 	}
+
+// 	static findById(id) {
+// 		return getdb()
+// 			.collection(collections.products)
+// 			.find({ _id: mongodb.ObjectID(id) })
+// 			.next()
+// 	}
+
+// 	static deleteById(id) {
+// 		return getdb()
+// 			.collection(collections.products)
+// 			.deleteOne({ _id: new mongodb.ObjectId(id) })
+// 	}
+// }
+
+// module.exports = Product
