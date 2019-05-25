@@ -23,6 +23,17 @@ var accessLogStream = fs.createWriteStream(
 )
 app.use(morgan('combined', { stream: accessLogStream }))
 
+/* Integrate default user */
+app.use((req, _, next) => {
+	User.findById('5ce8d9598f7d0d3f6cf1b641')
+		.then(user => {
+			console.log(user)
+			req.user = user
+			next()
+		})
+		.catch(err => console.log(err))
+})
+
 /* Configure request body parser on different routes */
 app.use('/admin', bodyParser.urlencoded({ extended: false }))
 app.post('/cart/*', bodyParser.urlencoded({ extended: false }))
