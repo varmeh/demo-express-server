@@ -1,4 +1,4 @@
-const { Product } = require('../models')
+const { Product, Order } = require('../models')
 
 exports.getIndex = (_, res) => {
 	Product.find()
@@ -35,7 +35,6 @@ exports.getProductDetails = (req, res) => {
 
 exports.getCart = (req, res) => {
 	req.user
-		.populate()
 		.populate('cart.items.productId')
 		.execPopulate()
 		.then(user => {
@@ -68,20 +67,36 @@ exports.removeProductFromCart = (req, res) => {
 }
 
 exports.getOrders = (req, res) => {
-	// req.user
-	// 	.getOrders()
-	// 	.then(orders => {
-	// 		res.render('customer/order', {
-	// 			pageTitle: 'Orders',
-	// 			orders: orders
-	// 		})
-	// 	})
-	// 	.catch(err => console.log(err))
+	Order.find({ 'user._id': req.user._id })
+		.then(orders => {
+			res.render('customer/order', {
+				pageTitle: 'Orders',
+				orders: orders
+			})
+		})
+		.catch(err => console.log(err))
 }
 
 exports.postOrder = (req, res) => {
-	// req.user
-	// 	.addOrder()
-	// 	.then(() => res.redirect('/orders'))
-	// 	.catch(err => console.log(err))
+	req.user
+		.populate('cart.items.productId')
+		.execPopulate()
+		.then(user => {
+			const products = user.cart.items.map(i => {
+				const { _id, title, price, description, imageUrl } = i.productId
+				return {
+					productData: { _id, title, price, description, imageUrl },
+					quantity: i.quantity
+				}
+			})
+			const { _id, name, email } = req.user
+			const order = new Order({ user: { _id, name, email }, products })
+			return order.save()
+		})
+		.then(result => {
+			console.log(result)
+			req.user.clearCart()
+		})
+		.then(() => res.redirect('/orders'))
+		.catch(err => console.log(err))
 }
