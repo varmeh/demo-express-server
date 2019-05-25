@@ -22,6 +22,33 @@ const userSchema = new Schema({
 		]
 	}
 })
+/* Attach methods to schema */
+
+userSchema.methods.addToCart = function(product) {
+	const productIndex = this.cart.items.findIndex(
+		cartProduct => cartProduct.productId.toString() === product._id.toString()
+	)
+
+	let updatedCartItems = [...this.cart.items]
+	if (productIndex >= 0) {
+		// Product already in cart
+		let newQuantity = this.cart.items[productIndex].quantity + 1
+		updatedCartItems[productIndex].quantity = newQuantity
+	} else {
+		updatedCartItems.push({ productId: product._id, quantity: 1 })
+	}
+
+	this.cart.items = updatedCartItems
+	return this.save()
+}
+
+userSchema.methods.removeFromCart = function(id) {
+	this.cart.items = this.cart.items.filter(
+		i => i.productId.toString() !== id.toString()
+	)
+
+	return this.save()
+}
 
 module.exports = new model('User', userSchema)
 
@@ -73,21 +100,7 @@ module.exports = new model('User', userSchema)
 // 	}
 
 // 	addToCart(product) {
-// 		const productIndex = this.cart.items.findIndex(
-// 			cartProduct => cartProduct.productId.toString() === product._id.toString()
-// 		)
-// 		let newQuantity = 1
-// 		let updatedCartItems = [...this.cart.items]
-
-// 		if (productIndex >= 0) {
-// 			// Product already in cart
-// 			newQuantity = this.cart.items[productIndex].quantity + 1
-// 			updatedCartItems[productIndex].quantity = newQuantity
-// 		} else {
-// 			updatedCartItems.push({ productId: product._id, quantity: 1 })
-// 		}
-
-// 		return this.updateCartItems(updatedCartItems)
+//
 // 	}
 
 // 	deleteFromCart(id) {

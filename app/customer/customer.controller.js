@@ -34,35 +34,37 @@ exports.getProductDetails = (req, res) => {
 }
 
 exports.getCart = (req, res) => {
-	// req.user
-	// 	.getCartProducts()
-	// 	.then(products => {
-	// 		res.render('customer/cart', {
-	// 			pageTitle: 'Cart',
-	// 			products: products
-	// 		})
-	// 	})
-	// 	.catch(err => console.log(err))
+	req.user
+		.populate()
+		.populate('cart.items.productId')
+		.execPopulate()
+		.then(user => {
+			res.render('customer/cart', {
+				pageTitle: 'Cart',
+				products: user.cart.items
+			})
+		})
+		.catch(err => console.log(err))
 }
 
 exports.addToCart = (req, res) => {
-	// Product.findById(req.body.productId)
-	// 	.then(product => req.user.addToCart(product))
-	// 	.then(result => {
-	// 		console.log(result)
-	// 		res.redirect('/cart')
-	// 	})
-	// 	.catch(err => console.log(err))
+	Product.findById(req.body.productId)
+		.then(product => req.user.addToCart(product))
+		.then(result => {
+			console.log(result)
+			res.redirect('/cart')
+		})
+		.catch(err => console.log(err))
 }
 
 exports.removeProductFromCart = (req, res) => {
-	// req.user
-	// 	.deleteFromCart(req.body.id)
-	// 	.then(result => {
-	// 		console.log(result)
-	// 		res.redirect('/cart')
-	// 	})
-	// 	.catch(err => console.log(err))
+	req.user
+		.removeFromCart(req.body.id)
+		.then(result => {
+			console.log(result)
+			res.redirect('/cart')
+		})
+		.catch(err => console.log(err))
 }
 
 exports.getOrders = (req, res) => {
