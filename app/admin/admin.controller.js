@@ -19,7 +19,8 @@ exports.postNewProduct = (req, res) => {
 		title,
 		imageUrl,
 		price,
-		description
+		description,
+		userId: req.user._id
 	})
 		.save()
 		.then(result => {
