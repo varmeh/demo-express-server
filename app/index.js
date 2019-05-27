@@ -5,6 +5,7 @@ const fs = require('fs')
 const path = require('path')
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
+const session = require('express-session')
 
 const configureRoutes = require('./main.routes')
 const app = express()
@@ -13,6 +14,13 @@ const { User } = require('./models')
 
 /* Apply Middleware */
 app.use(morgan('common'))
+app.use(
+	session({
+		secret: 'eI9PEtIFamOEVr67',
+		resave: false,
+		saveUninitialized: false
+	})
+)
 
 // Setup logging a file (in append mode)
 var accessLogStream = fs.createWriteStream(
