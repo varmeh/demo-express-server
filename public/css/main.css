@@ -158,6 +158,16 @@ form {
 	}
 }
 
+@media (min-width: 320px) and (max-width: 767px) {
+	.main-header__nav {
+		display: none;
+	}
+
+	#side-menu-toggle {
+		display: flex;
+	}
+}
+
 /* Cards CSS for product listing */
 .card {
 	box-shadow: 0 2px 8px #da8c27;
