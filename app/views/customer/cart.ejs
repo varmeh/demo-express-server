@@ -3,12 +3,11 @@
 
 <head>
 	<%- include('../includes/head.ejs') %>
-	<link rel="stylesheet" href="/css/button.css" />
 	<link rel="stylesheet" href="/css/cart.css">
 </head>
 
 <body>
-	<%- include('../includes/navigation.ejs') %>
+	<%- include('../includes/navigation.ejs', { isAuthenticated }) %>
 
 	<main class="margin">
 		<% if (products.length > 0) { %>

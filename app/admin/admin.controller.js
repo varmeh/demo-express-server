@@ -4,11 +4,12 @@ const defaultImageUrl =
 	'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1s6Ti-mWnvN1RZuZP1QKbAYheT_YShWNyKdRgxBYebXTaucYR'
 
 /* Renders UI for product addition */
-exports.newProduct = (_, res) => {
+exports.newProduct = (req, res) => {
 	res.render('admin/edit-product', {
 		pageTitle: 'Add Product',
 		defaultUrl: defaultImageUrl,
-		edit: false
+		edit: false,
+		isAuthenticated: req.session.user !== undefined
 	})
 }
 
@@ -43,14 +44,16 @@ exports.editProduct = (req, res) => {
 			res.render('admin/edit-product', {
 				pageTitle: 'Edit Product',
 				product: product,
-				edit: true
+				edit: true,
+				isAuthenticated: req.session.user !== undefined
 			})
 		})
 		.catch(err => {
 			console.log(err)
 			res.render('customer/error-info', {
 				pageTitle: 'Missing Product',
-				message: err.description
+				message: err.description,
+				isAuthenticated: req.session.user !== undefined
 			})
 		})
 }
@@ -77,17 +80,19 @@ exports.deleteById = (req, res) => {
 		.catch(err =>
 			res.render('customer/error-info', {
 				pageTitle: 'Deletion Failed',
-				message: err.description
+				message: err.description,
+				isAuthenticated: req.session.user !== undefined
 			})
 		)
 }
 
-exports.getProducts = (_, res) => {
+exports.getProducts = (req, res) => {
 	Product.find()
 		.then(products => {
 			res.render('admin/products', {
 				pageTitle: 'Admin Products',
-				products: products
+				products: products,
+				isAuthenticated: req.session.user !== undefined
 			})
 		})
 		.catch(err => console.log(err))
