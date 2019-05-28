@@ -6,19 +6,29 @@ const path = require('path')
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 const session = require('express-session')
+const MongodbStore = require('connect-mongodb-session')(session)
 
 const configureRoutes = require('./main.routes')
 const app = express()
 
 const { User } = require('./models')
 
+const MONGODB_URI =
+	'mongodb+srv://service-account:lrO2JByKvwH6W9am@cluster0-free-mumbai-hsmgc.mongodb.net/shop?retryWrites=true'
+
 /* Apply Middleware */
 app.use(morgan('common'))
+
+const sessionStore = new MongodbStore({
+	uri: MONGODB_URI,
+	collection: 'sessions'
+})
 app.use(
 	session({
 		secret: 'eI9PEtIFamOEVr67',
 		resave: false,
-		saveUninitialized: false
+		saveUninitialized: false,
+		store: sessionStore
 	})
 )
 
@@ -58,10 +68,7 @@ configureRoutes(app)
 
 const port = process.env.PORT || 8080
 mongoose
-	.connect(
-		'mongodb+srv://service-account:lrO2JByKvwH6W9am@cluster0-free-mumbai-hsmgc.mongodb.net/shop?retryWrites=true',
-		{ useNewUrlParser: true }
-	)
+	.connect(MONGODB_URI, { useNewUrlParser: true })
 	.then(result => {
 		console.log(result)
 		app.listen(port, () => {
