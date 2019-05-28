@@ -43,9 +43,9 @@ app.use(morgan('combined', { stream: accessLogStream }))
 
 /* Integrate default user */
 app.use((req, _, next) => {
-	User.findById('5ce8d9598f7d0d3f6cf1b641')
+	User.findById(req.session.user._id)
 		.then(user => {
-			console.log(user)
+			// Session only stores information while User method provides a full blown user model.
 			req.user = user
 			next()
 		})
