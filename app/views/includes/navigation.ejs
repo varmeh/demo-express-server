@@ -44,30 +44,45 @@
 
 <nav class="mobile-nav">
 	<ul class="mobile-nav__item-list">
+		<!-- <% if (!isAuthenticated) { %>
+		<li class="mobile-nav__item">
+			<a href="/login">Login</a>
+		</li>
+		<% } %> -->
 		<li class="mobile-nav__item">
 			<a class="<%= pageTitle.search(/home/i) === 0 ? 'active' : '' %>" href="/">Shop</a>
 		</li>
 		<li class="mobile-nav__item">
 			<a class="<%= pageTitle.search(/products/i) === 0 ? 'active' : '' %>" href="/products">Products</a>
 		</li>
+		<% if (isAuthenticated) { %>
 		<li class="mobile-nav__item">
 			<a class="<%= pageTitle.search(/cart/i) === 0? 'active' : '' %>" href="/cart">Cart</a>
 		</li>
 		<li class="mobile-nav__item">
 			<a class="<%= pageTitle.search(/orders/i) === 0 ? 'active' : '' %>" href="/orders">Orders</a>
 		</li>
-		<!-- <li class="mobile-nav__item">
+		<li class="mobile-nav__item">
 			<a class="<%= pageTitle.search(/add/i) === 0 ? 'active' : '' %>" href="/admin/product/new">Add Product
 			</a>
 		</li>
 		<li class="mobile-nav__item">
 			<a class="<%= pageTitle.search(/admin/i) === 0 ? 'active' : '' %>" href="/admin/products">Admin Products
 			</a>
-		</li> -->
+		</li>
+		<% } %>
 	</ul>
 	<ul class="mobile-nav__item-list">
+		<% if (!isAuthenticated) { %>
 		<li class="mobile-nav__item">
 			<a href="/login">Login</a>
 		</li>
+		<% } else { %>
+		<li class="mobile-nav__item">
+			<form action="/logout" method="post">
+				<button class="btn" type="submit">Logout</button>
+			</form>
+		</li>
+		<% } %>
 	</ul>
 </nav>
