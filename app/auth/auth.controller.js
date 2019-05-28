@@ -11,7 +11,10 @@ exports.postLogin = (req, res) => {
 	User.findById('5ce8d9598f7d0d3f6cf1b641')
 		.then(user => {
 			req.session.user = user
-			res.redirect('/')
+			req.session.save(err => {
+				console.log(err)
+				res.redirect('/')
+			})
 		})
 		.catch(err => console.log(err))
 }
