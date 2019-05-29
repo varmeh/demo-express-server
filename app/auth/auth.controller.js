@@ -30,4 +30,19 @@ exports.getSignup = (_, res) => {
 	})
 }
 
-exports.postSignup = (req, res) => {}
+exports.postSignup = (req, res) => {
+	const { name, email, password, confirmPassword } = req.body
+	User.findOne({ email })
+		.then(user => {
+			if (user || password != confirmPassword) {
+				return res.redirect('/signup')
+			}
+			const newUser = new User({ name, email, password })
+			return newUser.save()
+		})
+		.then(result => {
+			console.log(result)
+			res.redirect('/login')
+		})
+		.catch(err => console.log(err))
+}
