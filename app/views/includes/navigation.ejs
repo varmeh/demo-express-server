@@ -29,7 +29,10 @@
 		<ul class="main-header__item-list">
 			<% if (!isAuthenticated) { %>
 			<li class="main-header__item">
-				<a href="/login">Login</a>
+				<a class="<%= pageTitle.search(/login/i) === 0 ? 'active' : '' %>" href="/login">Login</a>
+			</li>
+			<li class="main-header__item">
+				<a class="<%= pageTitle.search(/signup/i) === 0 ? 'active' : '' %>" href="/signup">Signup</a>
 			</li>
 			<% } else { %>
 			<li class="main-header__item">
@@ -75,7 +78,10 @@
 	<ul class="mobile-nav__item-list">
 		<% if (!isAuthenticated) { %>
 		<li class="mobile-nav__item">
-			<a href="/login">Login</a>
+			<a class="<%= pageTitle.search(/login/i) === 0 ? 'active' : '' %>" href="/login">Login</a>
+		</li>
+		<li class="mobile-nav__item">
+			<a class="<%= pageTitle.search(/signup/i) === 0 ? 'active' : '' %>" href="/signup">Signup</a>
 		</li>
 		<% } else { %>
 		<li class="mobile-nav__item">
