@@ -39,15 +39,18 @@ exports.postSignup = (req, res) => {
 			if (user || password != confirmPassword) {
 				return res.redirect('/signup')
 			}
-			return bcrypt.hash(password, 12)
-		})
-		.then(hashedPassword => {
-			const newUser = new User({ name, email, password: hashedPassword })
-			return newUser.save()
-		})
-		.then(result => {
-			console.log(result)
-			res.redirect('/login')
+
+			// Nested chain to avoid calling following then in case of redirect to signup.
+			return bcrypt
+				.hash(password, 12)
+				.then(hashedPassword => {
+					const newUser = new User({ name, email, password: hashedPassword })
+					return newUser.save()
+				})
+				.then(result => {
+					console.log(result)
+					res.redirect('/login')
+				})
 		})
 		.catch(err => console.log(err))
 }
