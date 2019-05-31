@@ -8,6 +8,7 @@ const mongoose = require('mongoose')
 const session = require('express-session')
 const MongodbStore = require('connect-mongodb-session')(session)
 const csrf = require('csurf')
+const flash = require('connect-flash')
 
 const configureRoutes = require('./main.routes')
 const app = express()
@@ -64,6 +65,8 @@ app.post('/*', bodyParser.urlencoded({ extended: false }))
 // Note: This should be done after body parser, else node does not get _csrf in form body.
 const csrfProtection = csrf()
 app.use(csrfProtection)
+
+app.use(flash())
 
 /* Following variables are available to all responses as local variable */
 app.use((req, res, next) => {

@@ -173,6 +173,10 @@ form {
 	#side-menu-toggle {
 		display: flex;
 	}
+
+	.user-message {
+		width: 30rem;
+	}
 }
 
 /* Cards CSS for product listing */
@@ -211,4 +215,20 @@ form {
 .card__actions a {
 	margin: 0 0.25rem;
 	outline-style: none;
+}
+
+.user-message {
+	margin: auto;
+	width: 90%;
+	border: 1px solid #4771fa;
+	padding: 0.5rem;
+	border-radius: 3px;
+	background: #b9c9ff;
+	text-align: center;
+}
+
+.user-message--error {
+	border-color: red;
+	background: rgb(255, 176, 176);
+	color: red;
 }

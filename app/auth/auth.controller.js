@@ -3,8 +3,10 @@ const bcrypt = require('bcryptjs')
 const { User } = require('../models')
 
 exports.getLogin = (req, res) => {
+	const messageArray = req.flash('error')
 	res.render('auth/login', {
-		pageTitle: 'Login'
+		pageTitle: 'Login',
+		errorMessage: messageArray.length > 0 ? messageArray[0] : null
 	})
 }
 
@@ -13,6 +15,7 @@ exports.postLogin = (req, res) => {
 	User.findOne({ email })
 		.then(user => {
 			if (!user) {
+				req.flash('error', 'Invalid email or password.')
 				return res.redirect('/login')
 			}
 			bcrypt
