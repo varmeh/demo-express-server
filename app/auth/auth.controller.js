@@ -31,6 +31,7 @@ exports.postLogin = (req, res) => {
 				})
 				.catch(err => {
 					console.log(err)
+					req.flash('error', 'Invalid email or password.')
 					res.redirect('/login')
 				})
 		})
@@ -41,18 +42,20 @@ exports.postLogout = (req, res) => {
 	req.session.destroy(() => res.redirect('/'))
 }
 
-exports.getSignup = (_, res) => {
+exports.getSignup = (req, res) => {
+	const messageArray = req.flash('error')
 	res.render('auth/signup', {
 		pageTitle: 'Signup',
-		isAuthenticated: false
+		errorMessage: messageArray.length > 0 ? messageArray[0] : null
 	})
 }
 
 exports.postSignup = (req, res) => {
-	const { name, email, password, confirmPassword } = req.body
+	const { name, email, password } = req.body
 	User.findOne({ email })
 		.then(user => {
-			if (user || password != confirmPassword) {
+			if (user) {
+				req.flash('error', 'User Already exists!!!')
 				return res.redirect('/signup')
 			}
 
