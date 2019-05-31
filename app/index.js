@@ -42,9 +42,6 @@ var accessLogStream = fs.createWriteStream(
 )
 app.use(morgan('combined', { stream: accessLogStream }))
 
-const csrfProtection = csrf()
-app.use(csrfProtection)
-
 /* Integrate default user */
 app.use((req, _, next) => {
 	if (req.session.user === undefined) {
@@ -61,10 +58,19 @@ app.use((req, _, next) => {
 })
 
 /* Configure request body parser on different routes */
-app.use('/admin', bodyParser.urlencoded({ extended: false }))
-app.post('/cart/*', bodyParser.urlencoded({ extended: false }))
-app.post('/signup', bodyParser.urlencoded({ extended: false }))
-app.post('/login', bodyParser.urlencoded({ extended: false }))
+app.post('/*', bodyParser.urlencoded({ extended: false }))
+
+/* CSRF Protection */
+// Note: This should be done after body parser, else node does not get _csrf in form body.
+const csrfProtection = csrf()
+app.use(csrfProtection)
+
+/* Following variables are available to all responses as local variable */
+app.use((req, res, next) => {
+	res.locals.isAuthenticated = req.session.user != null
+	res.locals.csrfToken = req.csrfToken()
+	next()
+})
 
 /* Opening api access to public folder */
 app.use(express.static(path.join(__dirname, '..', 'public')))

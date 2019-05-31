@@ -6,8 +6,7 @@ exports.getIndex = (req, res) => {
 			console.log(req.session.user)
 			res.render('customer/home', {
 				pageTitle: 'Home',
-				products: products,
-				isAuthenticated: req.session.user != null
+				products: products
 			})
 		})
 		.catch(err => console.log(err))
@@ -18,8 +17,7 @@ exports.getProducts = (req, res) => {
 		.then(products => {
 			res.render('customer/product-list', {
 				pageTitle: 'Products',
-				products: products,
-				isAuthenticated: req.session.user != null
+				products: products
 			})
 		})
 		.catch(err => console.log(err))
@@ -30,8 +28,7 @@ exports.getProductDetails = (req, res) => {
 		.then(product => {
 			res.render('customer/product-detail', {
 				pageTitle: product.title,
-				product: product,
-				isAuthenticated: req.session.user != null
+				product: product
 			})
 		})
 		.catch(err => console.log(err))
@@ -44,8 +41,7 @@ exports.getCart = (req, res) => {
 		.then(user => {
 			res.render('customer/cart', {
 				pageTitle: 'Cart',
-				products: user.cart.items,
-				isAuthenticated: req.session.user != null
+				products: user.cart.items
 			})
 		})
 		.catch(err => console.log(err))
@@ -76,8 +72,7 @@ exports.getOrders = (req, res) => {
 		.then(orders => {
 			res.render('customer/order', {
 				pageTitle: 'Orders',
-				orders: orders,
-				isAuthenticated: req.session.user != null
+				orders: orders
 			})
 		})
 		.catch(err => console.log(err))

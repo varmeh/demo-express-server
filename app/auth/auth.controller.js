@@ -4,8 +4,7 @@ const { User } = require('../models')
 
 exports.getLogin = (req, res) => {
 	res.render('auth/login', {
-		pageTitle: 'Login',
-		isAuthenticated: req.session.user != null
+		pageTitle: 'Login'
 	})
 }
 
