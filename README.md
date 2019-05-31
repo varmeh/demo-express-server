@@ -7,3 +7,4 @@
 - Session Manager - [express-session](https://www.npmjs.com/package/express-session)
 - Session Store - [connect-mongodb-session](https://www.npmjs.com/package/connect-mongodb-session)
 - Password Encryption - [bcryptjs](https://www.npmjs.com/package/bcryptjs)
+- CSRF Validation - [csurf](https://www.npmjs.com/package/csurf)

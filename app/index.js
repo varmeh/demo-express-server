@@ -7,6 +7,7 @@ const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 const session = require('express-session')
 const MongodbStore = require('connect-mongodb-session')(session)
+const csrf = require('csurf')
 
 const configureRoutes = require('./main.routes')
 const app = express()
@@ -40,6 +41,9 @@ var accessLogStream = fs.createWriteStream(
 	}
 )
 app.use(morgan('combined', { stream: accessLogStream }))
+
+const csrfProtection = csrf()
+app.use(csrfProtection)
 
 /* Integrate default user */
 app.use((req, _, next) => {
