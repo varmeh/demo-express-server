@@ -59,7 +59,8 @@ app.use((req, _, next) => {
 /* Configure request body parser on different routes */
 app.use('/admin', bodyParser.urlencoded({ extended: false }))
 app.post('/cart/*', bodyParser.urlencoded({ extended: false }))
-app.use('/signup', bodyParser.urlencoded({ extended: false }))
+app.post('/signup', bodyParser.urlencoded({ extended: false }))
+app.post('/login', bodyParser.urlencoded({ extended: false }))
 
 /* Opening api access to public folder */
 app.use(express.static(path.join(__dirname, '..', 'public')))
