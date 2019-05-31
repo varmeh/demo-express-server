@@ -9,7 +9,7 @@ exports.newProduct = (req, res) => {
 		pageTitle: 'Add Product',
 		defaultUrl: defaultImageUrl,
 		edit: false,
-		isAuthenticated: req.session.user !== undefined
+		isAuthenticated: req.session.user != null
 	})
 }
 
@@ -45,7 +45,7 @@ exports.editProduct = (req, res) => {
 				pageTitle: 'Edit Product',
 				product: product,
 				edit: true,
-				isAuthenticated: req.session.user !== undefined
+				isAuthenticated: req.session.user != null
 			})
 		})
 		.catch(err => {
@@ -53,7 +53,7 @@ exports.editProduct = (req, res) => {
 			res.render('customer/error-info', {
 				pageTitle: 'Missing Product',
 				message: err.description,
-				isAuthenticated: req.session.user !== undefined
+				isAuthenticated: req.session.user != null
 			})
 		})
 }
@@ -81,7 +81,7 @@ exports.deleteById = (req, res) => {
 			res.render('customer/error-info', {
 				pageTitle: 'Deletion Failed',
 				message: err.description,
-				isAuthenticated: req.session.user !== undefined
+				isAuthenticated: req.session.user != null
 			})
 		)
 }
@@ -92,7 +92,7 @@ exports.getProducts = (req, res) => {
 			res.render('admin/products', {
 				pageTitle: 'Admin Products',
 				products: products,
-				isAuthenticated: req.session.user !== undefined
+				isAuthenticated: req.session.user != null
 			})
 		})
 		.catch(err => console.log(err))

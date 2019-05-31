@@ -7,7 +7,7 @@ exports.getIndex = (req, res) => {
 			res.render('customer/home', {
 				pageTitle: 'Home',
 				products: products,
-				isAuthenticated: req.session.user !== undefined
+				isAuthenticated: req.session.user != null
 			})
 		})
 		.catch(err => console.log(err))
@@ -19,7 +19,7 @@ exports.getProducts = (req, res) => {
 			res.render('customer/product-list', {
 				pageTitle: 'Products',
 				products: products,
-				isAuthenticated: req.session.user !== undefined
+				isAuthenticated: req.session.user != null
 			})
 		})
 		.catch(err => console.log(err))
@@ -31,7 +31,7 @@ exports.getProductDetails = (req, res) => {
 			res.render('customer/product-detail', {
 				pageTitle: product.title,
 				product: product,
-				isAuthenticated: req.session.user !== undefined
+				isAuthenticated: req.session.user != null
 			})
 		})
 		.catch(err => console.log(err))
@@ -45,7 +45,7 @@ exports.getCart = (req, res) => {
 			res.render('customer/cart', {
 				pageTitle: 'Cart',
 				products: user.cart.items,
-				isAuthenticated: req.session.user !== undefined
+				isAuthenticated: req.session.user != null
 			})
 		})
 		.catch(err => console.log(err))
@@ -77,7 +77,7 @@ exports.getOrders = (req, res) => {
 			res.render('customer/order', {
 				pageTitle: 'Orders',
 				orders: orders,
-				isAuthenticated: req.session.user !== undefined
+				isAuthenticated: req.session.user != null
 			})
 		})
 		.catch(err => console.log(err))
