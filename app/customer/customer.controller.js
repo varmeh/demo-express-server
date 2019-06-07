@@ -3,7 +3,6 @@ const { Product, Order } = require('../models')
 exports.getIndex = (req, res) => {
 	Product.find()
 		.then(products => {
-			console.log(req.session.user)
 			res.render('customer/home', {
 				pageTitle: 'Home',
 				products: products
