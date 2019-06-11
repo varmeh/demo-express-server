@@ -89,3 +89,11 @@ exports.postSignup = (req, res) => {
 		})
 		.catch(err => console.log(err))
 }
+
+exports.getReset = (req, res) => {
+	const messageArray = req.flash('error')
+	res.render('auth/reset', {
+		pageTitle: 'Reset Password',
+		errorMessage: messageArray.length > 0 ? messageArray[0] : null
+	})
+}
