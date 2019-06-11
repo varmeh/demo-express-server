@@ -8,7 +8,8 @@ const {
 	postLogout,
 	getSignup,
 	postSignup,
-	getReset
+	getReset,
+	postReset
 } = require('./auth.controller')
 
 router.get('/login', getLogin)
@@ -22,5 +23,7 @@ router.get('/signup', getSignup)
 router.post('/signup', postSignup)
 
 router.get('/reset', getReset)
+
+router.post('/reset', postReset)
 
 module.exports = router
