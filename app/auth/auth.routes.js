@@ -9,7 +9,9 @@ const {
 	getSignup,
 	postSignup,
 	getReset,
-	postReset
+	postReset,
+	getNewPassword,
+	postNewPassword
 } = require('./auth.controller')
 
 router.get('/login', getLogin)
@@ -25,5 +27,9 @@ router.post('/signup', postSignup)
 router.get('/reset', getReset)
 
 router.post('/reset', postReset)
+
+router.get('/reset/:resetToken', getNewPassword)
+
+router.post('/password/new', postNewPassword)
 
 module.exports = router

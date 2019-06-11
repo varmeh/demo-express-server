@@ -15,8 +15,7 @@ const app = express()
 
 const { User } = require('./models')
 
-const MONGODB_URI =
-	'mongodb+srv://service-account:lrO2JByKvwH6W9am@cluster0-free-mumbai-hsmgc.mongodb.net/shop?retryWrites=true'
+const MONGODB_URI = process.env.MONGO_URI
 
 /* Apply Middleware */
 app.use(morgan('common'))

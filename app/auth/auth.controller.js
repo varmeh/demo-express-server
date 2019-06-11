@@ -134,3 +134,47 @@ exports.postReset = (req, res) => {
 	})
 }
 
+exports.getNewPassword = (req, res) => {
+	const { resetToken } = req.params
+	User.findOne({
+		resetToken: req.params.resetToken,
+		resetTokenExpiration: { $gt: Date.now() }
+	})
+		.then(user => {
+			const messageArray = req.flash('error')
+			res.render('auth/new-password', {
+				pageTitle: 'New Password',
+				errorMessage: messageArray.length > 0 ? messageArray[0] : null,
+				userId: user._id.toString(),
+				passwordToken: resetToken
+			})
+		})
+		.catch(err => console.log(err))
+}
+
+exports.postNewPassword = (req, res) => {
+	const { newPassword, userId, passwordToken } = req.body
+	let resetUser = null
+	User.findOne({ resetToken: passwordToken, _id: userId })
+		.then(user => {
+			resetUser = user
+			return bcrypt.hash(newPassword, 12)
+		})
+		.then(hashedPassword => {
+			resetUser.password = hashedPassword
+			resetUser.resetToken = null
+			resetUser.resetTokenExpiration = undefined
+			return resetUser.save()
+		})
+		.then(result => {
+			console.log(result)
+			res.redirect('/login')
+			transporter.sendMail({
+				to: resetUser.email,
+				from: 'shop@node-complete.com',
+				subject: 'Your reset is successful',
+				html: '<h1>You password reset is successful</h1>'
+			})
+		})
+		.catch(err => console.log(err))
+}
