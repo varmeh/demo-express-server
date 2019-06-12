@@ -60,20 +60,25 @@ exports.postUpdateProduct = (req, res) => {
 	const { title, description, imageUrl, price, id } = req.body
 	Product.findById(id)
 		.then(product => {
+			if (product.userId != req.user._id) {
+				return res.redirect('/')
+			}
 			product.title = title
 			product.description = description
 			product.price = price
 			product.imageUrl = imageUrl
 
-			return product.save()
+			return product.save().then(() => res.redirect('/admin/products'))
 		})
-		.then(() => res.redirect('/admin/products'))
 		.catch(err => console.log(err))
 }
 
 exports.deleteById = (req, res) => {
-	Product.findByIdAndRemove(req.body.id)
-		.then(() => res.redirect('/admin/products'))
+	Product.deleteOne({ _id: req.body.id, userId: req.user._id })
+		.then(result => {
+			console.log(result)
+			res.redirect('/admin/products')
+		})
 		.catch(err =>
 			res.render('customer/error-info', {
 				pageTitle: 'Deletion Failed',
