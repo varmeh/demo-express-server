@@ -1,4 +1,5 @@
 const express = require('express')
+const { body } = require('express-validator/check')
 
 const router = express.Router()
 
@@ -22,7 +23,27 @@ router.post('/logout', postLogout)
 
 router.get('/signup', getSignup)
 
-router.post('/signup', postSignup)
+router.post(
+	'/signup',
+	[
+		body('email')
+			.isEmail()
+			.withMessage('Please enter a valid email'),
+		body(
+			'password',
+			'Please enter a password with atleast 6 characters and with alphabets and numbers'
+		)
+			.isLength({ min: 6, max: 20 })
+			.isAlphanumeric(),
+		body('confirmPassword').custom((value, { req }) => {
+			if (value !== req.body.password) {
+				throw new Error('Password & Confirm Password do not match!')
+			}
+			return true
+		})
+	],
+	postSignup
+)
 
 router.get('/reset', getReset)
 
