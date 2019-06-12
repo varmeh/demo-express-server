@@ -83,7 +83,7 @@ exports.deleteById = (req, res) => {
 }
 
 exports.getProducts = (req, res) => {
-	Product.find()
+	Product.find({ userId: req.user._id })
 		.then(products => {
 			res.render('admin/products', {
 				pageTitle: 'Admin Products',
