@@ -73,30 +73,22 @@ exports.postSignup = (req, res) => {
 			errorMessage: errors.array()[0].msg
 		})
 	}
-	User.findOne({ email })
-		.then(user => {
-			if (user) {
-				req.flash('error', 'User Already exists!!!')
-				return res.redirect('/signup')
-			}
 
-			// Nested chain to avoid calling following then in case of redirect to signup.
-			return bcrypt
-				.hash(password, 12)
-				.then(hashedPassword => {
-					const newUser = new User({ name, email, password: hashedPassword })
-					return newUser.save()
-				})
-				.then(result => {
-					console.log(result)
-					res.redirect('/login')
-					return transporter.sendMail({
-						to: email,
-						from: 'shop@node-complete.com',
-						subject: 'Congratulations: Your signup is successful!!!',
-						html: '<h1>You successfully signed up!</h1>'
-					})
-				})
+	bcrypt
+		.hash(password, 12)
+		.then(hashedPassword => {
+			const newUser = new User({ name, email, password: hashedPassword })
+			return newUser.save()
+		})
+		.then(result => {
+			console.log(result)
+			res.redirect('/login')
+			return transporter.sendMail({
+				to: email,
+				from: 'shop@node-complete.com',
+				subject: 'Congratulations: Your signup is successful!!!',
+				html: '<h1>You successfully signed up!</h1>'
+			})
 		})
 		.catch(err => console.log(err))
 }

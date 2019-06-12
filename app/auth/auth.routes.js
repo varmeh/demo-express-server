@@ -3,6 +3,8 @@ const { body } = require('express-validator/check')
 
 const router = express.Router()
 
+const { User } = require('../models')
+
 const {
 	getLogin,
 	postLogin,
@@ -40,6 +42,13 @@ router.post(
 				throw new Error('Password & Confirm Password do not match!')
 			}
 			return true
+		}),
+		body('email').custom(value => {
+			return User.findOne({ email: value }).then(user => {
+				if (user) {
+					return Promise.reject('User Already exists!!!')
+				}
+			})
 		})
 	],
 	postSignup
