@@ -25,10 +25,20 @@ exports.getLogin = (req, res) => {
 
 exports.postLogin = (req, res) => {
 	const { email, password } = req.body
+	const errors = validationResult(req)
+
+	if (!errors.isEmpty()) {
+		return res.status(422).render('auth/login', {
+			pageTitle: 'Login',
+			errorMessage: errors.array()[0].msg
+		})
+	}
+
 	User.findOne({ email })
 		.then(user => {
+			// Search based on user email only
 			if (!user) {
-				req.flash('error', 'Invalid email or password.')
+				req.flash('error', 'Invalid user!!!')
 				return res.redirect('/login')
 			}
 			bcrypt

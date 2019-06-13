@@ -19,7 +19,17 @@ const {
 
 router.get('/login', getLogin)
 
-router.post('/login', postLogin)
+router.post(
+	'/login',
+	[
+		body('email', 'Invalid email!!!').isEmail(),
+		body('password', 'Invalid email or password!!!').isLength({
+			min: 6,
+			max: 20
+		})
+	],
+	postLogin
+)
 
 router.post('/logout', postLogout)
 
