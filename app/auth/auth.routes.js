@@ -22,11 +22,15 @@ router.get('/login', getLogin)
 router.post(
 	'/login',
 	[
-		body('email', 'Invalid email!!!').isEmail(),
-		body('password', 'Invalid email or password!!!').isLength({
-			min: 6,
-			max: 20
-		})
+		body('email', 'Invalid email!!!')
+			.isEmail()
+			.normalizeEmail(),
+		body('password', 'Invalid email or password!!!')
+			.isLength({
+				min: 6,
+				max: 20
+			})
+			.trim()
 	],
 	postLogin
 )
@@ -40,19 +44,23 @@ router.post(
 	[
 		body('email')
 			.isEmail()
-			.withMessage('Please enter a valid email'),
+			.withMessage('Please enter a valid email')
+			.normalizeEmail(),
 		body(
 			'password',
 			'Please enter a password with atleast 6 characters and with alphabets and numbers'
 		)
 			.isLength({ min: 6, max: 20 })
-			.isAlphanumeric(),
-		body('confirmPassword').custom((value, { req }) => {
-			if (value !== req.body.password) {
-				throw new Error('Password & Confirm Password do not match!')
-			}
-			return true
-		}),
+			.isAlphanumeric()
+			.trim(),
+		body('confirmPassword')
+			.trim()
+			.custom((value, { req }) => {
+				if (value !== req.body.password) {
+					throw new Error('Password & Confirm Password do not match!')
+				}
+				return true
+			}),
 		body('email').custom(value => {
 			return User.findOne({ email: value }).then(user => {
 				if (user) {
