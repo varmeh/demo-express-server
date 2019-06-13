@@ -11,6 +11,9 @@
 	<%- include('../includes/navigation.ejs', { isAuthenticated }) %>
 
 	<main>
+		<% if (errorMessage) { %>
+		<div class="user-message user-message--error"><%= errorMessage %></div>
+		<% } %>
 		<form class="product-form" action="/admin/product/<% if (edit) { %>update<% } else { %>add<% } %>"
 			method="POST">
 			<div class="form-control">

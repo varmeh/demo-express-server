@@ -1,3 +1,4 @@
+const { validationResult } = require('express-validator/check')
 const { Product } = require('../models')
 
 const defaultImageUrl =
@@ -8,13 +9,25 @@ exports.newProduct = (req, res) => {
 	res.render('admin/edit-product', {
 		pageTitle: 'Add Product',
 		defaultUrl: defaultImageUrl,
-		edit: false
+		edit: false,
+		errorMessage: null
 	})
 }
 
 /* Save new product in db */
 exports.postNewProduct = (req, res) => {
 	const { title, imageUrl, price, description } = req.body
+	const errors = validationResult(req)
+
+	if (!errors.isEmpty()) {
+		return res.status(422).render('admin/edit-product', {
+			pageTitle: 'Add Product',
+			edit: true,
+			product: { title, imageUrl, price, description },
+			errorMessage: errors.array()[0].msg
+		})
+	}
+
 	new Product({
 		title,
 		imageUrl,
@@ -43,7 +56,8 @@ exports.editProduct = (req, res) => {
 			res.render('admin/edit-product', {
 				pageTitle: 'Edit Product',
 				product: product,
-				edit: true
+				edit: true,
+				errorMessage: null
 			})
 		})
 		.catch(err => {
@@ -58,11 +72,19 @@ exports.editProduct = (req, res) => {
 /* Update existing product in db */
 exports.postUpdateProduct = (req, res) => {
 	const { title, description, imageUrl, price, id } = req.body
+	const errors = validationResult(req)
+
+	if (!errors.isEmpty()) {
+		return res.status(422).render('admin/edit-product', {
+			pageTitle: 'Edit Product',
+			edit: true,
+			product: { title, imageUrl, price, description, _id: id },
+			errorMessage: errors.array()[0].msg
+		})
+	}
+
 	Product.findById(id)
 		.then(product => {
-			if (product.userId != req.user._id) {
-				return res.redirect('/')
-			}
 			product.title = title
 			product.description = description
 			product.price = price
