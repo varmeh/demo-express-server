@@ -69,7 +69,11 @@ exports.getSignup = (req, res) => {
 	const messageArray = req.flash('error')
 	res.render('auth/signup', {
 		pageTitle: 'Signup',
-		errorMessage: messageArray.length > 0 ? messageArray[0] : null
+		errorMessage: messageArray.length > 0 ? messageArray[0] : null,
+		initialValue: {
+			name: '',
+			email: ''
+		}
 	})
 }
 
@@ -80,7 +84,11 @@ exports.postSignup = (req, res) => {
 	if (!errors.isEmpty()) {
 		return res.status(422).render('auth/signup', {
 			pageTitle: 'Signup',
-			errorMessage: errors.array()[0].msg
+			errorMessage: errors.array()[0].msg,
+			initialValue: {
+				name,
+				email
+			}
 		})
 	}
 

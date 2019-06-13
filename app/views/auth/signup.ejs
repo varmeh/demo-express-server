@@ -17,11 +17,11 @@
         <form class="login-form" action="/signup" method="POST">
             <div class="form-control">
                 <label for="name">Name</label>
-                <input type="text" name="name" id="name" required>
+                <input type="text" name="name" id="name" value="<%= initialValue.name %>" required>
             </div>
             <div class="form-control">
                 <label for="email">E-Mail</label>
-                <input type="email" name="email" id="email" required>
+                <input type="email" name="email" id="email" value="<%= initialValue.email %>" required>
             </div>
             <div class="form-control">
                 <label for="password">Password</label>
