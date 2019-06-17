@@ -1,5 +1,6 @@
 const { validationResult } = require('express-validator/check')
 const { Product } = require('../models')
+const { Error500, Error404, ErrorCustom } = require('../error.manager')
 
 const defaultImageUrl =
 	'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1s6Ti-mWnvN1RZuZP1QKbAYheT_YShWNyKdRgxBYebXTaucYR'
@@ -15,7 +16,7 @@ exports.newProduct = (req, res) => {
 }
 
 /* Save new product in db */
-exports.postNewProduct = (req, res) => {
+exports.postNewProduct = (req, res, next) => {
 	const { title, imageUrl, price, description } = req.body
 	const errors = validationResult(req)
 
@@ -40,17 +41,11 @@ exports.postNewProduct = (req, res) => {
 			console.log(result)
 			res.redirect('/')
 		})
-		.catch(err => {
-			console.log(err)
-			res.render('customer/error-info', {
-				pageTitle: 'New Product Error',
-				message: err.description
-			})
-		})
+		.catch(err => next(new Error500(err)))
 }
 
 /* UI for editing existing product */
-exports.editProduct = (req, res) => {
+exports.editProduct = (req, res, next) => {
 	Product.findById(req.params.id)
 		.then(product => {
 			res.render('admin/edit-product', {
@@ -60,17 +55,11 @@ exports.editProduct = (req, res) => {
 				errorMessage: null
 			})
 		})
-		.catch(err => {
-			console.log(err)
-			res.render('customer/error-info', {
-				pageTitle: 'Missing Product',
-				message: err.description
-			})
-		})
+		.catch(err => next(new Error404(err.description, 'Missing Product')))
 }
 
 /* Update existing product in db */
-exports.postUpdateProduct = (req, res) => {
+exports.postUpdateProduct = (req, res, next) => {
 	const { title, description, imageUrl, price, id } = req.body
 	const errors = validationResult(req)
 
@@ -92,24 +81,23 @@ exports.postUpdateProduct = (req, res) => {
 
 			return product.save().then(() => res.redirect('/admin/products'))
 		})
-		.catch(err => console.log(err))
+		.catch(err =>
+			next(new ErrorCustom(err.description, 'Missing Product', 404))
+		)
 }
 
-exports.deleteById = (req, res) => {
+exports.deleteById = (req, res, next) => {
 	Product.deleteOne({ _id: req.body.id, userId: req.user._id })
 		.then(result => {
 			console.log(result)
 			res.redirect('/admin/products')
 		})
 		.catch(err =>
-			res.render('customer/error-info', {
-				pageTitle: 'Deletion Failed',
-				message: err.description
-			})
+			next(new ErrorCustom(err.description, 'Deletion Failed', 401))
 		)
 }
 
-exports.getProducts = (req, res) => {
+exports.getProducts = (req, res, next) => {
 	Product.find({ userId: req.user._id })
 		.then(products => {
 			res.render('admin/products', {
@@ -117,5 +105,5 @@ exports.getProducts = (req, res) => {
 				products: products
 			})
 		})
-		.catch(err => console.log(err))
+		.catch(err => next(new Error404(err.description, 'No Products found')))
 }

@@ -3,6 +3,7 @@ const adminRoutes = require('./admin/admin.routes')
 const authRoutes = require('./auth/auth.routes')
 
 const isAuth = require('../middlewares/is-auth')
+const { Error404 } = require('./error.manager')
 
 /* Remember order matters when registering routes */
 module.exports = app => {
@@ -12,10 +13,7 @@ module.exports = app => {
 	app.use(authRoutes)
 
 	// Setting up 404 message
-	app.use((_, res) => {
-		res.status(404).render('customer/error-info', {
-			pageTitle: 'Page Not Found',
-			message: 'Page Not Found'
-		})
+	app.use(() => {
+		throw new Error404('Page not found')
 	})
 }

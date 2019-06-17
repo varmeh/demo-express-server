@@ -11,6 +11,7 @@ const csrf = require('csurf')
 const flash = require('connect-flash')
 
 const configureRoutes = require('./main.routes')
+const { logError, errorHandler, ErrorCustom } = require('./error.manager')
 const app = express()
 
 const { User } = require('./models')
@@ -49,11 +50,14 @@ app.use((req, _, next) => {
 	} else {
 		User.findById(req.session.user._id)
 			.then(user => {
+				if (!user) {
+					return next(new ErrorCustom('User not found', 'Forbidden', 401))
+				}
 				// Session only stores information while User method provides a full blown user model.
 				req.user = user
 				next()
 			})
-			.catch(err => console.log(err))
+			.catch(err => next(new ErrorCustom(err.message, 'System Error', 408)))
 	}
 })
 
@@ -83,6 +87,8 @@ app.set('views', 'app/views')
 
 /* Add routes */
 configureRoutes(app)
+app.use(logError)
+app.use(errorHandler)
 
 const port = process.env.PORT || 8080
 mongoose
