@@ -6,6 +6,7 @@ const sendGridTransport = require('nodemailer-sendgrid-transport')
 const { validationResult } = require('express-validator/check')
 
 const { User } = require('../models')
+const { Error500 } = require('../error.manager')
 
 const transporter = nodeMailer.createTransport(
 	sendGridTransport({
@@ -23,7 +24,7 @@ exports.getLogin = (req, res) => {
 	})
 }
 
-exports.postLogin = (req, res) => {
+exports.postLogin = (req, res, next) => {
 	const { email, password } = req.body
 	const errors = validationResult(req)
 
@@ -58,7 +59,7 @@ exports.postLogin = (req, res) => {
 					res.redirect('/login')
 				})
 		})
-		.catch(err => console.log(err))
+		.catch(err => next(new Error500(err.description)))
 }
 
 exports.postLogout = (req, res) => {
@@ -77,7 +78,7 @@ exports.getSignup = (req, res) => {
 	})
 }
 
-exports.postSignup = (req, res) => {
+exports.postSignup = (req, res, next) => {
 	const { name, email, password } = req.body
 	const errors = validationResult(req)
 
@@ -108,7 +109,7 @@ exports.postSignup = (req, res) => {
 				html: '<h1>You successfully signed up!</h1>'
 			})
 		})
-		.catch(err => console.log(err))
+		.catch(err => next(new Error500(err.description)))
 }
 
 exports.getReset = (req, res) => {
@@ -119,7 +120,7 @@ exports.getReset = (req, res) => {
 	})
 }
 
-exports.postReset = (req, res) => {
+exports.postReset = (req, res, next) => {
 	crypto.randomBytes(32, (err, buffer) => {
 		if (err) {
 			console.log(err)
@@ -149,11 +150,11 @@ exports.postReset = (req, res) => {
 					`
 				})
 			})
-			.catch(err => console.log(err))
+			.catch(err => next(new Error500(err.description)))
 	})
 }
 
-exports.getNewPassword = (req, res) => {
+exports.getNewPassword = (req, res, next) => {
 	const { resetToken } = req.params
 	User.findOne({
 		resetToken: req.params.resetToken,
@@ -168,10 +169,10 @@ exports.getNewPassword = (req, res) => {
 				passwordToken: resetToken
 			})
 		})
-		.catch(err => console.log(err))
+		.catch(err => next(new Error500(err.description)))
 }
 
-exports.postNewPassword = (req, res) => {
+exports.postNewPassword = (req, res, next) => {
 	const { newPassword, userId, passwordToken } = req.body
 	let resetUser = null
 	User.findOne({ resetToken: passwordToken, _id: userId })
@@ -195,5 +196,5 @@ exports.postNewPassword = (req, res) => {
 				html: '<h1>You password reset is successful</h1>'
 			})
 		})
-		.catch(err => console.log(err))
+		.catch(err => next(new Error500(err.description)))
 }

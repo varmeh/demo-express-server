@@ -1,6 +1,7 @@
 const { Product, Order } = require('../models')
+const { Error500 } = require('../error.manager')
 
-exports.getIndex = (req, res) => {
+exports.getIndex = (req, res, next) => {
 	Product.find()
 		.then(products => {
 			res.render('customer/home', {
@@ -8,10 +9,10 @@ exports.getIndex = (req, res) => {
 				products: products
 			})
 		})
-		.catch(err => console.log(err))
+		.catch(err => next(new Error500(err.description)))
 }
 
-exports.getProducts = (req, res) => {
+exports.getProducts = (req, res, next) => {
 	Product.find()
 		.then(products => {
 			res.render('customer/product-list', {
@@ -19,10 +20,10 @@ exports.getProducts = (req, res) => {
 				products: products
 			})
 		})
-		.catch(err => console.log(err))
+		.catch(err => next(new Error500(err.description)))
 }
 
-exports.getProductDetails = (req, res) => {
+exports.getProductDetails = (req, res, next) => {
 	Product.findById(req.params.productId)
 		.then(product => {
 			res.render('customer/product-detail', {
@@ -30,10 +31,10 @@ exports.getProductDetails = (req, res) => {
 				product: product
 			})
 		})
-		.catch(err => console.log(err))
+		.catch(err => next(new Error500(err.description)))
 }
 
-exports.getCart = (req, res) => {
+exports.getCart = (req, res, next) => {
 	req.user
 		.populate('cart.items.productId')
 		.execPopulate()
@@ -43,30 +44,30 @@ exports.getCart = (req, res) => {
 				products: user.cart.items
 			})
 		})
-		.catch(err => console.log(err))
+		.catch(err => next(new Error500(err.description)))
 }
 
-exports.addToCart = (req, res) => {
+exports.addToCart = (req, res, next) => {
 	Product.findById(req.body.productId)
 		.then(product => req.user.addToCart(product))
 		.then(result => {
 			console.log(result)
 			res.redirect('/cart')
 		})
-		.catch(err => console.log(err))
+		.catch(err => next(new Error500(err.description)))
 }
 
-exports.removeProductFromCart = (req, res) => {
+exports.removeProductFromCart = (req, res, next) => {
 	req.user
 		.removeFromCart(req.body.id)
 		.then(result => {
 			console.log(result)
 			res.redirect('/cart')
 		})
-		.catch(err => console.log(err))
+		.catch(err => next(new Error500(err.description)))
 }
 
-exports.getOrders = (req, res) => {
+exports.getOrders = (req, res, next) => {
 	Order.find({ 'user._id': req.user._id })
 		.then(orders => {
 			res.render('customer/order', {
@@ -74,10 +75,10 @@ exports.getOrders = (req, res) => {
 				orders: orders
 			})
 		})
-		.catch(err => console.log(err))
+		.catch(err => next(new Error500(err.description)))
 }
 
-exports.postOrder = (req, res) => {
+exports.postOrder = (req, res, next) => {
 	req.user
 		.populate('cart.items.productId')
 		.execPopulate()
@@ -98,5 +99,5 @@ exports.postOrder = (req, res) => {
 			req.user.clearCart()
 		})
 		.then(() => res.redirect('/orders'))
-		.catch(err => console.log(err))
+		.catch(err => next(new Error500(err.description)))
 }

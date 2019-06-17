@@ -81,9 +81,7 @@ exports.postUpdateProduct = (req, res, next) => {
 
 			return product.save().then(() => res.redirect('/admin/products'))
 		})
-		.catch(err =>
-			next(new ErrorCustom(err.description, 'Missing Product', 404))
-		)
+		.catch(err => next(new Error404(err.description, 'Missing Product')))
 }
 
 exports.deleteById = (req, res, next) => {
