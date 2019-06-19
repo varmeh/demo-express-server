@@ -61,12 +61,12 @@ router.post(
 				}
 				return true
 			}),
-		body('email').custom(value => {
-			return User.findOne({ email: value }).then(user => {
-				if (user) {
-					return Promise.reject('User Already exists!!!')
-				}
-			})
+		body('email').custom(async value => {
+			const user = await User.findOne({ email: value })
+			if (user) {
+				return Promise.reject('User Already exists!!!')
+			}
+			return true
 		})
 	],
 	postSignup

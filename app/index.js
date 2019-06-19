@@ -17,17 +17,19 @@ const app = express()
 const { User } = require('./models')
 
 const MONGODB_URI = process.env.MONGO_URI
+const SESSION_SECRET = process.env.SESSION_SECRET
 
 /* Apply Middleware */
 app.use(morgan('common'))
 
+/* Create a temporary session store */
 const sessionStore = new MongodbStore({
 	uri: MONGODB_URI,
 	collection: 'sessions'
 })
 app.use(
 	session({
-		secret: 'eI9PEtIFamOEVr67',
+		secret: SESSION_SECRET,
 		resave: false,
 		saveUninitialized: false,
 		store: sessionStore
@@ -44,20 +46,21 @@ var accessLogStream = fs.createWriteStream(
 app.use(morgan('combined', { stream: accessLogStream }))
 
 /* Integrate default user */
-app.use((req, _, next) => {
+app.use(async (req, _res, next) => {
 	if (req.session.user === undefined) {
 		next()
 	} else {
-		User.findById(req.session.user._id)
-			.then(user => {
-				if (!user) {
-					return next(new ErrorCustom('User not found', 'Forbidden', 401))
-				}
-				// Session only stores information while User method provides a full blown user model.
-				req.user = user
-				next()
-			})
-			.catch(err => next(new ErrorCustom(err.message, 'System Error', 408)))
+		try {
+			const user = await User.findById(req.session.user._id)
+			if (!user) {
+				return next(new ErrorCustom('User not found', 'Forbidden', 401))
+			}
+			// Session only stores information while User method provides a full blown user model.
+			req.user = user
+			next()
+		} catch (err) {
+			next(new ErrorCustom(err.message, 'System Error', 408))
+		}
 	}
 })
 
@@ -91,12 +94,13 @@ app.use(logError)
 app.use(errorHandler)
 
 const port = process.env.PORT || 8080
-mongoose
-	.connect(MONGODB_URI, { useNewUrlParser: true })
-	.then(result => {
-		console.log(result)
-		app.listen(port, () => {
-			console.log(`Server on http://localhost:${port}`)
-		})
+
+const run = async () => {
+	const result = await mongoose.connect(MONGODB_URI, { useNewUrlParser: true })
+	console.log(result)
+	app.listen(port, () => {
+		console.log(`Server on http://localhost:${port}`)
 	})
-	.catch(err => console.log(err))
+}
+
+run().catch(err => console.log(err))

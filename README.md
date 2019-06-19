@@ -19,6 +19,7 @@ Variables required:
 
 - MONGO_URI (Dbaas)
 - SEND_GRID_API (STMP Service)
+- SESSION_SECRET (Session store)
 
 ## Running the app
 
