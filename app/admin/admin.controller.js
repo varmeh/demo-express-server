@@ -16,7 +16,7 @@ exports.newProduct = (req, res) => {
 }
 
 /* Save new product in db */
-exports.postNewProduct = (req, res, next) => {
+exports.postNewProduct = async (req, res, next) => {
 	const { title, imageUrl, price, description } = req.body
 	const errors = validationResult(req)
 
@@ -29,37 +29,38 @@ exports.postNewProduct = (req, res, next) => {
 		})
 	}
 
-	new Product({
-		title,
-		imageUrl,
-		price,
-		description,
-		userId: req.user._id
-	})
-		.save()
-		.then(result => {
-			console.log(result)
-			res.redirect('/')
-		})
-		.catch(err => next(new Error500(err)))
+	try {
+		await new Product({
+			title,
+			imageUrl,
+			price,
+			description,
+			userId: req.user._id
+		}).save()
+
+		res.redirect('/')
+	} catch (err) {
+		next(new Error500(err))
+	}
 }
 
 /* UI for editing existing product */
-exports.editProduct = (req, res, next) => {
-	Product.findById(req.params.id)
-		.then(product => {
-			res.render('admin/edit-product', {
-				pageTitle: 'Edit Product',
-				product: product,
-				edit: true,
-				errorMessage: null
-			})
+exports.editProduct = async (req, res, next) => {
+	try {
+		const product = await Product.findById(req.params.id)
+		res.render('admin/edit-product', {
+			pageTitle: 'Edit Product',
+			product: product,
+			edit: true,
+			errorMessage: null
 		})
-		.catch(err => next(new Error404(err.description, 'Missing Product')))
+	} catch (err) {
+		next(new Error404(err.description, 'Missing Product'))
+	}
 }
 
 /* Update existing product in db */
-exports.postUpdateProduct = (req, res, next) => {
+exports.postUpdateProduct = async (req, res, next) => {
 	const { title, description, imageUrl, price, id } = req.body
 	const errors = validationResult(req)
 
@@ -72,36 +73,39 @@ exports.postUpdateProduct = (req, res, next) => {
 		})
 	}
 
-	Product.findById(id)
-		.then(product => {
-			product.title = title
-			product.description = description
-			product.price = price
-			product.imageUrl = imageUrl
+	try {
+		// Fetch product
+		const product = await Product.findById(id)
+		product.title = title
+		product.description = description
+		product.price = price
+		product.imageUrl = imageUrl
 
-			return product.save().then(() => res.redirect('/admin/products'))
-		})
-		.catch(err => next(new Error404(err.description, 'Missing Product')))
+		// Save product with updated information
+		await product.save()
+		res.redirect('/admin/products')
+	} catch (err) {
+		next(new Error404(err.description, 'Missing Product'))
+	}
 }
 
-exports.deleteById = (req, res, next) => {
-	Product.deleteOne({ _id: req.body.id, userId: req.user._id })
-		.then(result => {
-			console.log(result)
-			res.redirect('/admin/products')
-		})
-		.catch(err =>
-			next(new ErrorCustom(err.description, 'Deletion Failed', 401))
-		)
+exports.deleteById = async (req, res, next) => {
+	try {
+		await Product.deleteOne({ _id: req.body.id, userId: req.user._id })
+		res.redirect('/admin/products')
+	} catch (err) {
+		next(new ErrorCustom(err.description, 'Deletion Failed', 401))
+	}
 }
 
-exports.getProducts = (req, res, next) => {
-	Product.find({ userId: req.user._id })
-		.then(products => {
-			res.render('admin/products', {
-				pageTitle: 'Admin Products',
-				products: products
-			})
+exports.getProducts = async (req, res, next) => {
+	try {
+		const products = await Product.find({ userId: req.user._id })
+		res.render('admin/products', {
+			pageTitle: 'Admin Products',
+			products: products
 		})
-		.catch(err => next(new Error404(err.description, 'No Products found')))
+	} catch (err) {
+		next(new Error404(err.description, 'No Products found'))
+	}
 }
