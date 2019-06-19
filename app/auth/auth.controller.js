@@ -24,7 +24,7 @@ exports.getLogin = (req, res) => {
 	})
 }
 
-exports.postLogin = (req, res, next) => {
+exports.postLogin = async (req, res, next) => {
 	const { email, password } = req.body
 	const errors = validationResult(req)
 
@@ -35,31 +35,27 @@ exports.postLogin = (req, res, next) => {
 		})
 	}
 
-	User.findOne({ email })
-		.then(user => {
-			// Search based on user email only
-			if (!user) {
-				req.flash('error', 'Invalid user!!!')
-				return res.redirect('/login')
-			}
-			bcrypt
-				.compare(password, user.password)
-				.then(doPasswordMatch => {
-					if (doPasswordMatch) {
-						req.session.user = user
-						return req.session.save(() => {
-							res.redirect('/')
-						})
-					}
-					res.redirect('/login')
-				})
-				.catch(err => {
-					console.log(err)
-					req.flash('error', 'Invalid email or password.')
-					res.redirect('/login')
-				})
-		})
-		.catch(err => next(new Error500(err.description)))
+	try {
+		// Search user on basis of email only
+		const user = await User.findOne({ email })
+		if (!user) {
+			throw new Error()
+		}
+
+		// Compare Password
+		const isMatch = await bcrypt.compare(password, user.password)
+		if (isMatch) {
+			req.session.user = user
+			return req.session.save(() => {
+				res.redirect('/')
+			})
+		}
+		// Password mismatch
+		throw new Error()
+	} catch (err) {
+		req.flash('error')
+		res.status(401).redirect('/login')
+	}
 }
 
 exports.postLogout = (req, res) => {
@@ -78,7 +74,7 @@ exports.getSignup = (req, res) => {
 	})
 }
 
-exports.postSignup = (req, res, next) => {
+exports.postSignup = async (req, res, next) => {
 	const { name, email, password } = req.body
 	const errors = validationResult(req)
 
@@ -93,23 +89,19 @@ exports.postSignup = (req, res, next) => {
 		})
 	}
 
-	bcrypt
-		.hash(password, 12)
-		.then(hashedPassword => {
-			const newUser = new User({ name, email, password: hashedPassword })
-			return newUser.save()
+	try {
+		const hashedPassword = await bcrypt.hash(password, 12)
+		await new User({ name, email, password: hashedPassword }).save()
+		res.redirect('/login')
+		return transporter.sendMail({
+			to: email,
+			from: 'shop@node-complete.com',
+			subject: 'Congratulations: Your signup is successful!!!',
+			html: '<h1>You successfully signed up!</h1>'
 		})
-		.then(result => {
-			console.log(result)
-			res.redirect('/login')
-			return transporter.sendMail({
-				to: email,
-				from: 'shop@node-complete.com',
-				subject: 'Congratulations: Your signup is successful!!!',
-				html: '<h1>You successfully signed up!</h1>'
-			})
-		})
-		.catch(err => next(new Error500(err.description)))
+	} catch (err) {
+		next(new Error500(err.description))
+	}
 }
 
 exports.getReset = (req, res) => {
@@ -121,80 +113,82 @@ exports.getReset = (req, res) => {
 }
 
 exports.postReset = (req, res, next) => {
-	crypto.randomBytes(32, (err, buffer) => {
+	crypto.randomBytes(32, async (err, buffer) => {
 		if (err) {
 			console.log(err)
 			return res.redirect('/reset')
 		}
 
 		const token = buffer.toString('hex')
-		User.findOne({ email: req.body.email })
-			.then(user => {
-				if (!user) {
-					req.flash('error', 'No account with that email found')
-					return res.redirect('/reset')
-				}
-				user.resetToken = token
-				user.resetTokenExpiration = Date.now() + 1 * 3600 * 1000 // 1 hr in ms
-				return user.save()
-			})
-			.then(() => {
-				res.redirect('/')
-				return transporter.sendMail({
-					to: req.body.email,
-					from: 'shop@node-complete.com',
-					subject: 'Password Reset!!!',
-					html: `
+		try {
+			const user = await User.findOne({ email: req.body.email })
+			if (!user) {
+				req.flash('error', 'No account with that email found')
+				return res.redirect('/reset')
+			}
+
+			// Add token & expiry date to user data
+			user.resetToken = token
+			user.resetTokenExpiration = Date.now() + 1 * 3600 * 1000 // 1 hr in ms
+			await user.save()
+
+			res.redirect('/')
+			return transporter.sendMail({
+				to: req.body.email,
+				from: 'shop@node-complete.com',
+				subject: 'Password Reset!!!',
+				html: `
 						<p>You requested a password reset</p>
 						<p>Click this <a href="http://localhost:8080/reset/${token}">link</a> to set a new password</p>
 					`
-				})
 			})
-			.catch(err => next(new Error500(err.description)))
+		} catch (err) {
+			next(new Error500(err.description))
+		}
 	})
 }
 
-exports.getNewPassword = (req, res, next) => {
+exports.getNewPassword = async (req, res, next) => {
 	const { resetToken } = req.params
-	User.findOne({
-		resetToken: req.params.resetToken,
-		resetTokenExpiration: { $gt: Date.now() }
-	})
-		.then(user => {
-			const messageArray = req.flash('error')
-			res.render('auth/new-password', {
-				pageTitle: 'New Password',
-				errorMessage: messageArray.length > 0 ? messageArray[0] : null,
-				userId: user._id.toString(),
-				passwordToken: resetToken
-			})
+
+	try {
+		const user = await User.findOne({
+			resetToken,
+			resetTokenExpiration: { $gt: Date.now() }
 		})
-		.catch(err => next(new Error500(err.description)))
+		const messageArray = req.flash('error')
+		res.render('auth/new-password', {
+			pageTitle: 'New Password',
+			errorMessage: messageArray.length > 0 ? messageArray[0] : null,
+			userId: user._id.toString(),
+			passwordToken: resetToken
+		})
+	} catch (err) {
+		next(new Error500(err.description))
+	}
 }
 
-exports.postNewPassword = (req, res, next) => {
+exports.postNewPassword = async (req, res, next) => {
 	const { newPassword, userId, passwordToken } = req.body
 	let resetUser = null
-	User.findOne({ resetToken: passwordToken, _id: userId })
-		.then(user => {
-			resetUser = user
-			return bcrypt.hash(newPassword, 12)
+
+	try {
+		const user = await User.findOne({ resetToken: passwordToken, _id: userId })
+		const hashedPassword = await bcrypt.hash(newPassword, 12)
+
+		user.password = hashedPassword
+		user.resetToken = null
+		user.resetTokenExpiration = undefined
+		await user.save()
+
+		res.redirect('/login')
+		transporter.sendMail({
+			to: user.email,
+			from: 'shop@node-complete.com',
+			subject: 'Your reset is successful',
+			html: '<h1>You password reset is successful</h1>'
 		})
-		.then(hashedPassword => {
-			resetUser.password = hashedPassword
-			resetUser.resetToken = null
-			resetUser.resetTokenExpiration = undefined
-			return resetUser.save()
-		})
-		.then(result => {
-			console.log(result)
-			res.redirect('/login')
-			transporter.sendMail({
-				to: resetUser.email,
-				from: 'shop@node-complete.com',
-				subject: 'Your reset is successful',
-				html: '<h1>You password reset is successful</h1>'
-			})
-		})
-		.catch(err => next(new Error500(err.description)))
+	} catch (err) {
+		next(new Error500(err.description))
+	}
 }
