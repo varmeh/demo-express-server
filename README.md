@@ -10,6 +10,7 @@
 - CSRF Validation - [csurf](https://www.npmjs.com/package/csurf)
 - Email API - [nodemailer](https://nodemailer.com/about/)
 - User Input Validation - [express-validator](https://express-validator.github.io/docs/)
+- File Upload - [multer](https://www.npmjs.com/package/multer)
 
 ## Setting Env variables
 
