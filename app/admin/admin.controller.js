@@ -1,15 +1,12 @@
 const { validationResult } = require('express-validator/check')
 const { Product } = require('../models')
 const { Error500, Error404, ErrorCustom } = require('../error.manager')
-
-const defaultImageUrl =
-	'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1s6Ti-mWnvN1RZuZP1QKbAYheT_YShWNyKdRgxBYebXTaucYR'
+const multer = require('multer')
 
 /* Renders UI for product addition */
 exports.newProduct = (req, res) => {
 	res.render('admin/edit-product', {
 		pageTitle: 'Add Product',
-		defaultUrl: defaultImageUrl,
 		edit: false,
 		errorMessage: null
 	})
@@ -17,14 +14,23 @@ exports.newProduct = (req, res) => {
 
 /* Save new product in db */
 exports.postNewProduct = async (req, res, next) => {
-	const { title, imageUrl, price, description } = req.body
+	const { title, price, description } = req.body
+	const image = req.file
+	if (!image) {
+		return res.status(422).render('admin/edit-product', {
+			pageTitle: 'Add Product',
+			edit: true,
+			product: { title, price, description },
+			errorMessage: 'Attach a png, jpg or jpeg image only'
+		})
+	}
 	const errors = validationResult(req)
 
 	if (!errors.isEmpty()) {
 		return res.status(422).render('admin/edit-product', {
 			pageTitle: 'Add Product',
 			edit: true,
-			product: { title, imageUrl, price, description },
+			product: { title, price, description },
 			errorMessage: errors.array()[0].msg
 		})
 	}
@@ -32,7 +38,7 @@ exports.postNewProduct = async (req, res, next) => {
 	try {
 		await new Product({
 			title,
-			imageUrl,
+			imageUrl: image.path,
 			price,
 			description,
 			userId: req.user._id
@@ -60,15 +66,17 @@ exports.editProduct = async (req, res, next) => {
 }
 
 /* Update existing product in db */
-exports.postUpdateProduct = async (req, res, next) => {
-	const { title, description, imageUrl, price, id } = req.body
+exports.postEditProduct = async (req, res, next) => {
+	const { title, description, price, id } = req.body
+	const image = req.file
+
 	const errors = validationResult(req)
 
 	if (!errors.isEmpty()) {
 		return res.status(422).render('admin/edit-product', {
 			pageTitle: 'Edit Product',
 			edit: true,
-			product: { title, imageUrl, price, description, _id: id },
+			product: { title, price, description, _id: id },
 			errorMessage: errors.array()[0].msg
 		})
 	}
@@ -79,7 +87,9 @@ exports.postUpdateProduct = async (req, res, next) => {
 		product.title = title
 		product.description = description
 		product.price = price
-		product.imageUrl = imageUrl
+		if (image) {
+			product.imageUrl = image.path
+		}
 
 		// Save product with updated information
 		await product.save()

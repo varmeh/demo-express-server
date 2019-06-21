@@ -88,6 +88,10 @@ const fileFilter = (req, file, cb) => {
 
 // Read `image` id from form text and save as per storage & filter options
 app.post('/admin/product/add', multer({ storage, fileFilter }).single('image'))
+app.post(
+	'/admin/product/update',
+	multer({ storage, fileFilter }).single('image')
+)
 
 /* CSRF Protection */
 // Note: This should be done after body parser, else node does not get _csrf in form body.
