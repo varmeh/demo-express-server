@@ -7,7 +7,7 @@ const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 const session = require('express-session')
 const MongodbStore = require('connect-mongodb-session')(session)
-const csrf = require('csurf')
+const multer = require('multer')
 const flash = require('connect-flash')
 
 const configureRoutes = require('./main.routes')
@@ -67,10 +67,31 @@ app.use(async (req, _res, next) => {
 /* Configure request body parser on different routes */
 app.post('/*', bodyParser.urlencoded({ extended: false }))
 
+/* Multer Configuration */
+const storage = multer.diskStorage({
+	destination: (req, file, cb) => {
+		cb(null, 'images')
+	},
+	filename: (req, file, cb) => {
+		cb(null, new Date().toISOString() + '-' + file.originalname)
+	}
+})
+
+const fileFilter = (req, file, cb) => {
+	const saveFile =
+		file.mimetype == 'image/png' ||
+		file.mimetype == 'image/jpg' ||
+		file.mimetype == 'image/jpeg'
+	// File saved if either of these types
+	cb(null, saveFile)
+}
+
+// Read `image` id from form text and save as per storage & filter options
+app.post('/admin/product/add', multer({ storage, fileFilter }).single('image'))
+
 /* CSRF Protection */
 // Note: This should be done after body parser, else node does not get _csrf in form body.
-const csrfProtection = csrf()
-app.use(csrfProtection)
+app.use(require('csurf')())
 
 app.use(flash())
 

@@ -14,16 +14,20 @@
 		<% if (errorMessage) { %>
 		<div class="user-message user-message--error"><%= errorMessage %></div>
 		<% } %>
-		<form class="product-form" action="/admin/product/<% if (edit) { %>update<% } else { %>add<% } %>"
-			method="POST">
+		<form class="product-form" action="/admin/product/<% if (edit) { %>update<% } else { %>add<% } %>" method="POST"
+			enctype="multipart/form-data">
 			<div class="form-control">
 				<label for="Title">Title</label>
 				<input type="text" name="title" id="title" value="<% if (edit) { %><%= product.title %><% } %>" />
 			</div>
-			<div class="form-control">
+			<!-- <div class="form-control">
 				<label for="image">Image Url</label>
 				<input type="url" name="imageUrl" id="image"
 					value="<% if (edit) { %><%= product.imageUrl %><% } else { %><%= defaultUrl %><% } %>" />
+			</div> -->
+			<div class="form-control">
+				<label for="image">Image Url</label>
+				<input type="file" name="image" id="image" />
 			</div>
 			<div class="form-control">
 				<label for="price">Price</label>
