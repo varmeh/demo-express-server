@@ -11,7 +11,8 @@ const {
 	addToCart,
 	getOrders,
 	removeProductFromCart,
-	postOrder
+	postOrder,
+	getInvoice
 } = require('./customer.controller')
 
 router.get('/', getIndex)
@@ -29,5 +30,7 @@ router.post('/cart/remove', isAuth, removeProductFromCart)
 router.post('/order/create', isAuth, postOrder)
 
 router.get('/orders', isAuth, getOrders)
+
+router.get('/orders/:orderId', isAuth, getInvoice)
 
 module.exports = router
