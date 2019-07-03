@@ -11,6 +11,7 @@
 - Email API - [nodemailer](https://nodemailer.com/about/)
 - User Input Validation - [express-validator](https://express-validator.github.io/docs/)
 - File Upload - [multer](https://www.npmjs.com/package/multer)
+- PDF Creater - [pdfkit](https://www.npmjs.com/package/pdfkit)
 
 ## Setting Env variables
 

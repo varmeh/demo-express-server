@@ -1,5 +1,5 @@
-const fs = require('fs')
-const path = require('path')
+const PDFDocument = require('pdfkit')
+
 const { Product, Order } = require('../models')
 const { Error500 } = require('../error.manager')
 
@@ -104,9 +104,17 @@ exports.postOrder = async (req, res, next) => {
 exports.getInvoice = (req, res, next) => {
 	const { orderId } = req.params
 	const invoiceName = `invoice-${orderId}.pdf`
-	const invoicePath = path.join('data', 'invoices', invoiceName)
-	const file = fs.createReadStream(invoicePath)
+
+	const pdfDoc = new PDFDocument()
+
+	// Configure response headers
 	res.setHeader('Content-type', 'application/pdf')
 	res.setHeader('Content-Disposition', `attachment; filename="${invoiceName}"`)
-	file.pipe(res)
+
+	// Pipe all the data to res stream
+	pdfDoc.pipe(res)
+
+	// Add data to pdf stream
+	pdfDoc.text(`Invoice for Order #${orderId}`)
+	pdfDoc.end()
 }
