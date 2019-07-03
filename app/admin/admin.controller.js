@@ -1,7 +1,7 @@
 const { validationResult } = require('express-validator/check')
 const { Product } = require('../models')
 const { Error500, Error404, ErrorCustom } = require('../error.manager')
-const multer = require('multer')
+const { deleteFile } = require('../../util/file')
 
 /* Renders UI for product addition */
 exports.newProduct = (req, res) => {
@@ -88,6 +88,8 @@ exports.postEditProduct = async (req, res, next) => {
 		product.description = description
 		product.price = price
 		if (image) {
+			// Delete older image
+			deleteFile(product.imageUrl)
 			product.imageUrl = image.path
 		}
 
@@ -101,6 +103,13 @@ exports.postEditProduct = async (req, res, next) => {
 
 exports.deleteById = async (req, res, next) => {
 	try {
+		// Delete older image
+		const product = await Product.findById(req.body.id)
+		if (!product) {
+			return next(new Error404('Product Not found', 'Server Error'))
+		}
+		deleteFile(product.imageUrl)
+
 		await Product.deleteOne({ _id: req.body.id, userId: req.user._id })
 		res.redirect('/admin/products')
 	} catch (err) {
