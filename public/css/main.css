@@ -154,31 +154,6 @@ form {
 	z-index: 5;
 	display: none;
 }
-
-@media (min-width: 768px) {
-	.main-header__nav {
-		display: flex;
-	}
-
-	#side-menu-toggle {
-		display: none;
-	}
-}
-
-@media (min-width: 320px) and (max-width: 767px) {
-	.main-header__nav {
-		display: none;
-	}
-
-	#side-menu-toggle {
-		display: flex;
-	}
-
-	.user-message {
-		width: 30rem;
-	}
-}
-
 /* Cards CSS for product listing */
 .card {
 	box-shadow: 0 2px 8px #da8c27;
@@ -231,4 +206,48 @@ form {
 	border-color: red;
 	background: rgb(255, 176, 176);
 	color: red;
+}
+
+.pagination {
+	margin-top: 2rem;
+	text-align: center;
+}
+
+.pagination a {
+	text-decoration: none;
+	color: #da8c27;
+	padding: 0.5rem;
+	border: 1px solid #da8c27;
+	margin: 0 0.5rem;
+}
+
+.pagination a:hover,
+.pagination a:active,
+.pagination a.active {
+	background: #da8c27;
+	color: white;
+}
+
+@media (min-width: 768px) {
+	.main-header__nav {
+		display: flex;
+	}
+
+	#side-menu-toggle {
+		display: none;
+	}
+}
+
+@media (min-width: 320px) and (max-width: 767px) {
+	.main-header__nav {
+		display: none;
+	}
+
+	#side-menu-toggle {
+		display: flex;
+	}
+
+	.user-message {
+		width: 30rem;
+	}
 }

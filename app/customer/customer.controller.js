@@ -3,13 +3,27 @@ const PDFDocument = require('pdfkit')
 const { Product, Order } = require('../models')
 const { Error500 } = require('../error.manager')
 
+const ITEMS_PER_PAGE = 2
+
 exports.getIndex = async (req, res, next) => {
+	// Setting default value of page to 1
+	const { page = 1 } = req.query
 	try {
-		const products = await Product.find()
-		res.render('customer/home', {
-			pageTitle: 'Home',
-			products: products
-		})
+		const totalItems = await Product.find().countDocuments()
+		if (totalItems) {
+			const products = await Product.find()
+				.skip((page - 1) * ITEMS_PER_PAGE)
+				.limit(ITEMS_PER_PAGE)
+
+			res.render('customer/home', {
+				pageTitle: 'Home',
+				products: products,
+				pages: Math.ceil(totalItems / ITEMS_PER_PAGE),
+				currentPage: page
+			})
+		} else {
+			throw new Error('No Products Found')
+		}
 	} catch (err) {
 		next(new Error500(err.description))
 	}
