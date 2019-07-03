@@ -108,6 +108,7 @@ app.use((req, res, next) => {
 
 /* Opening api access to public folder */
 app.use(express.static(path.join(__dirname, '..', 'public')))
+app.use('/images', express.static(path.join(__dirname, '..', 'images')))
 
 /* Setting up ejs template engine */
 app.set('view engine', 'ejs')
