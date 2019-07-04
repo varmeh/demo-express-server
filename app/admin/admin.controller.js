@@ -101,19 +101,21 @@ exports.postEditProduct = async (req, res, next) => {
 	}
 }
 
-exports.deleteById = async (req, res, next) => {
+exports.deleteProduct = async (req, res, next) => {
 	try {
-		// Delete older image
-		const product = await Product.findById(req.body.id)
-		if (!product) {
-			return next(new Error404('Product Not found', 'Server Error'))
-		}
-		deleteFile(product.imageUrl)
+		const { productId } = req.params
+		const product = await Product.findById(productId)
 
-		await Product.deleteOne({ _id: req.body.id, userId: req.user._id })
-		res.redirect('/admin/products')
+		if (!product) {
+			throw new Error('Product not found')
+		}
+		await Product.deleteOne({ _id: productId, userId: req.user._id })
+		deleteFile(product.imageUrl) // Delete older image
+
+		res.status(200).json({ message: 'Success' })
 	} catch (err) {
-		next(new ErrorCustom(err.description, 'Deletion Failed', 401))
+		console.log(`Error: ${err.description}`)
+		res.status(500).json({ error: err.description })
 	}
 }
 

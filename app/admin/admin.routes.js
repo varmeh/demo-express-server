@@ -7,7 +7,7 @@ const {
 	postNewProduct,
 	editProduct,
 	postEditProduct,
-	deleteById,
+	deleteProduct,
 	getProducts
 } = require('./admin.controller')
 
@@ -30,8 +30,7 @@ router.get('/product/edit/:id', editProduct)
 router.post('/product/update', postProductValidators, postEditProduct)
 
 // Web forms only support GET & POST request
-router.post('/product/delete', deleteById) // Caters to delete request from web forms
-router.delete('/product/delete', deleteById) // Caters to AJAX delete request
+router.delete('/product/:productId', deleteProduct) // Caters to AJAX delete request
 
 router.get('/products', getProducts)
 
