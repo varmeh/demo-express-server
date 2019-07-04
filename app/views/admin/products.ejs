@@ -3,6 +3,7 @@
 
 <head>
 	<%- include('../includes/head.ejs') %>
+	<script defer src="/js/admin.js"></script>
 </head>
 
 <body>
@@ -25,11 +26,9 @@
 				</div>
 				<div class="card__actions">
 					<a href="/admin/product/edit/<%= product._id %>" class="btn">Edit</a>
-					<form action="/admin/product/delete" method="POST">
-						<input type="hidden" name="_csrf" value="<%= csrfToken %>">
-						<button class="btn" type="submit">Delete</button>
-						<input type="hidden" name="id" value="<%= product._id %>" />
-					</form>
+					<input type="hidden" name="_csrf" value="<%= csrfToken %>">
+					<input type="hidden" name="id" value="<%= product._id %>" />
+					<button class="btn" type="button" onclick="deleteProduct(this)">Delete</button>
 				</div>
 			</article>
 			<% } %>
